@@ -49,6 +49,10 @@ Adventurer.prototype.onFrameChange = function onFrameChange(count) {
     this.updateFallingFrame(count);
 };
 
+Adventurer.prototype.resetPlummetingFrame = function resetPlummetingFrame() {
+    this.plummeting.frame = 0;
+}
+
 Adventurer.prototype.updateStandingFrame = function(count) {
     if (count % 12 === 0) {
         this.standing.frame++;
