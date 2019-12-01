@@ -18,6 +18,11 @@ var isFalling;
 var isPlummeting;
 var jumpHeight;
 var adventurer;
+var lastDirection;
+var LastDirection = {
+	Left: 1,
+	Right: 2,
+};
 function setup()
 {
 	createCanvas(1024, 576);
@@ -29,6 +34,7 @@ function setup()
 	isRight = false;
 	isFalling = false;
 	isPlummeting = false;
+	lastDirection = LastDirection.Left;
 }
 
 function preload() {
@@ -55,44 +61,39 @@ function draw()
 	if(isLeft && isFalling)
 	{
 		adventurer.setState(Adventurer.States.FallingLeft);
-		adventurer.draw(gameChar_x, gameChar_y);
 	}
 	else if(isRight && isFalling)
 	{
 		adventurer.setState(Adventurer.States.FallingRight);
-		adventurer.draw(gameChar_x, gameChar_y);
 	}
 	else if(isLeft && isPlummeting)
 	{
 		adventurer.setState(Adventurer.States.PlummetingLeft);
-		adventurer.draw(gameChar_x, gameChar_y);
 	}
 	else if(isRight && isPlummeting)
 	{
 		adventurer.setState(Adventurer.States.PlummetingRight);
-		adventurer.draw(gameChar_x, gameChar_y);
-	}
+	} 
 	else if(isLeft)
 	{
 		adventurer.setState(Adventurer.States.WalkingLeft);
-		adventurer.draw(gameChar_x, gameChar_y);
 	}
 	else if(isRight)
 	{
 		adventurer.setState(Adventurer.States.WalkingRight);
-		adventurer.draw(gameChar_x, gameChar_y);
 	}
 	else if(isFalling)
 	{
 		adventurer.setState(Adventurer.States.FallingLeft);
-		adventurer.draw(gameChar_x, gameChar_y);
 	}
 	else
 	{
-		adventurer.setState(Adventurer.States.FacingLeft);
-		adventurer.draw(gameChar_x, gameChar_y);
+		adventurer.setState(
+			lastDirection === LastDirection.Left
+				? Adventurer.States.FacingLeft
+				: Adventurer.States.FacingRight);
 	}
-
+	adventurer.draw(gameChar_x, gameChar_y);
 	///////////INTERACTION CODE//////////
 	//Put conditional statements to move the game character below here
 	if (isRight) {
@@ -124,11 +125,14 @@ function keyPressed()
 {
 	if (keyCode === LEFT_ARROW_CODE) {
 		isLeft = true;
+		lastDirection = LastDirection.Left;
 	}
 	if (keyCode === RIGHT_ARROW_CODE) {
 		isRight = true;
+		lastDirection = LastDirection.Right;
 	}
 	if (keyCode === SPACEBAR_CODE && !(isPlummeting || isFalling)) {
+		adventurer.resetPlummetingFrame();
 		isPlummeting = true;
 	}
 }
