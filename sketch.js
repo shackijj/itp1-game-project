@@ -84,7 +84,10 @@ function draw()
 	}
 	else if(isFalling)
 	{
-		adventurer.setState(Adventurer.States.FallingLeft);
+		adventurer.setState(
+			lastDirection === LastDirection.Left
+			? Adventurer.States.FallingLeft
+			: Adventurer.States.FallingRight);
 	}
 	else
 	{
