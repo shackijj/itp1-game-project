@@ -27,7 +27,7 @@ function setup()
 {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3/4;
-	jumpHeight = floorPos_y - 100;
+	jumpHeight = floorPos_y - 200;
 	gameChar_x = width/2;
 	gameChar_y = floorPos_y;
 	isLeft = false;
@@ -88,6 +88,13 @@ function draw()
 			lastDirection === LastDirection.Left
 			? Adventurer.States.FallingLeft
 			: Adventurer.States.FallingRight);
+	}
+	else if(isPlummeting)
+	{
+		adventurer.setState(
+			lastDirection === LastDirection.Left
+			? Adventurer.States.PlummetingLeft
+			: Adventurer.States.PlummetingRight);
 	}
 	else
 	{

@@ -76,7 +76,7 @@ Adventurer.prototype.updateWalkingFrame = function(count) {
 }
 
 Adventurer.prototype.updatePlummetingFrame = function(count) {
-    if (count % 6 === 0) {
+    if (count % 3 === 0) {
         this.plummeting.frame++;
         if (this.plummeting.frame > 7) {
             this.plummeting.frame = 0;
