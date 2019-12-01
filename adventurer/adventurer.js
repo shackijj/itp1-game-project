@@ -17,7 +17,7 @@ Adventurer.States = {
 };
 
 function Adventurer() {
-    this.spritesheet = loadImage('adventurer/adventurer.png');
+    this.spritesheet = loadImage("adventurer/adventurer.png");
     this.state = Adventurer.States.FacingRight;
     this.standing = {
         frame: 0,
@@ -41,6 +41,12 @@ function Adventurer() {
         x: 0,
         y: 0,
     };
+    this.safari = this.isSafari();
+}
+
+Adventurer.prototype.isSafari = function() {
+    var ua = window.navigator.userAgent.toLocaleLowerCase();
+    return ua.indexOf('safari') > -1 && ua.indexOf('chrome') === -1;
 }
 
 /**
@@ -113,11 +119,13 @@ Adventurer.prototype.updateFallingFrame = function(count) {
 
 Adventurer.prototype._drawSprite = function (xDest, yDest, flippedHor) {
     push();
-    noSmooth();
     var xMultiplier = 1;
     if (flippedHor) {
         scale(-1.0, 1.0);
         xMultiplier = -1;
+    }
+    if (!this.safari) {
+        noSmooth();
     }
     image(
         this.spritesheet,
@@ -128,7 +136,7 @@ Adventurer.prototype._drawSprite = function (xDest, yDest, flippedHor) {
         xDest,
         yDest,
         SPRITE_WIDTH,
-        SPRITE_HEIGHT)
+        SPRITE_HEIGHT);
     pop();
 }
 
