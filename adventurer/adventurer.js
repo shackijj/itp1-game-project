@@ -1,5 +1,9 @@
 var SPRITE_WIDTH = 50;
 var SPRITE_HEIGHT = 37
+var X_OFFSET = 100;
+var Y_OFFSET = 144;
+var AREA_WIDTH = 200;
+var AREA_HEIGHT = 148;
 
 Adventurer.States = {
     FacingLeft: 1,
@@ -107,136 +111,57 @@ Adventurer.prototype.updateFallingFrame = function(count) {
     }
 }
 
-Adventurer.prototype.drawWalkingRight = function () {
+Adventurer.prototype._drawSprite = function (xDest, yDest, flippedHor) {
     push();
     noSmooth();
+    var xMultiplier = 1;
+    if (flippedHor) {
+        scale(-1.0, 1.0);
+        xMultiplier = -1;
+    }
     image(
         this.spritesheet,
-        this.x - 100,
-        this.y - 144,
-        200,
-        148,
-        this.walking.x,
-        this.walking.y,
+        xMultiplier * (this.x - X_OFFSET),
+        this.y - Y_OFFSET,
+        xMultiplier * AREA_WIDTH,
+        AREA_HEIGHT,
+        xDest,
+        yDest,
         SPRITE_WIDTH,
         SPRITE_HEIGHT)
     pop();
+}
+
+Adventurer.prototype.drawWalkingRight = function () {
+    this._drawSprite(this.walking.x, this.walking.y);
 };
 
 Adventurer.prototype.drawWalkingLeft = function () {
-    push()
-    noSmooth();
-    scale(-1.0, 1.0)
-    image(
-        this.spritesheet,
-        -1 * (this.x - 100),
-        this.y - 144,
-        -200,
-        148,
-        this.walking.x,
-        this.walking.y,
-        SPRITE_WIDTH,
-        SPRITE_HEIGHT);
-    pop();
+    this._drawSprite(this.walking.x, this.walking.y, true);
 }
 
 Adventurer.prototype.drawFacingRight = function drawFacingRight() {
-    push();
-    noSmooth();
-    image(
-        this.spritesheet,
-        this.x - 100,
-        this.y - 144,
-        200,
-        148,
-        this.standing.x,
-        this.standing.y,
-        SPRITE_WIDTH,
-        SPRITE_HEIGHT);
-    pop();
+    this._drawSprite(this.standing.x, this.standing.y);
 }
 
 Adventurer.prototype.drawFacingLeft = function drawFacingLeft() {
-    push();
-    noSmooth();
-    scale(-1.0, 1.0);
-    image(
-        this.spritesheet,
-        -1 * (this.x - 100),
-        this.y - 144,
-        -200,
-        148,
-        this.standing.x,
-        this.standing.y,
-        SPRITE_WIDTH,
-        SPRITE_HEIGHT)
-    pop();
+    this._drawSprite(this.standing.x, this.standing.y, true);
 }
 
 Adventurer.prototype.drawPlummetingRight = function drawPlummetingRight() {
-    push();
-    noSmooth();
-    image(
-        this.spritesheet,
-        this.x - 100,
-        this.y - 144,
-        200,
-        148,
-        this.plummeting.x,
-        this.plummeting.y,
-        SPRITE_WIDTH,
-        SPRITE_HEIGHT)
-    pop();
+    this._drawSprite(this.plummeting.x, this.plummeting.y);
 }
 
 Adventurer.prototype.drawPlummetingLeft = function drawPlummetingLeft() {
-    push();
-    noSmooth();
-    scale(-1.0, 1.0);
-    image(
-        this.spritesheet,
-        -1 * (this.x - 100),
-        this.y - 144,
-        -200,
-        148,
-        this.plummeting.x,
-        this.plummeting.y,
-        SPRITE_WIDTH,
-        SPRITE_HEIGHT)
-    pop();
+    this._drawSprite(this.plummeting.x, this.plummeting.y, true);
 }
 
 Adventurer.prototype.drawFallingRight = function drawFallingRight() {
-    push();
-    noSmooth();
-    image(
-        this.spritesheet,
-        this.x - 100,
-        this.y - 144,
-        200,
-        148,
-        this.falling.x,
-        this.falling.y,
-        SPRITE_WIDTH,
-        SPRITE_HEIGHT)
-    pop();
+    this._drawSprite(this.falling.x, this.falling.y);
 }
 
 Adventurer.prototype.drawFallingLeft = function drawFallingLeft() {
-    push();
-    noSmooth();
-    scale(-1.0, 1.0);
-    image(
-        this.spritesheet,
-        -1 * (this.x - 100),
-        this.y - 144,
-        -200,
-        148,
-        this.falling.x,
-        this.falling.y,
-        SPRITE_WIDTH,
-        SPRITE_HEIGHT)
-    pop();
+    this._drawSprite(this.falling.x, this.falling.y, true);
 }
 
 /**
