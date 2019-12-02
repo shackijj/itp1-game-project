@@ -17,7 +17,6 @@ Adventurer.States = {
 };
 
 function Adventurer() {
-    this.spritesheet = loadImage("adventurer/adventurer.png");
     this.state = Adventurer.States.FacingRight;
     this.standing = {
         frame: 0,
@@ -42,6 +41,10 @@ function Adventurer() {
         y: 0,
     };
     this.safari = this.isSafari();
+}
+
+Adventurer.prototype.load = function () {
+    this.spritesheet = loadImage("/adventurer/adventurer.png");
 }
 
 Adventurer.prototype.isSafari = function() {
