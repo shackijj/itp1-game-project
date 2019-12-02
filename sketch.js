@@ -11,18 +11,29 @@ Game interaction
 
 var gameChar_x;
 var gameChar_y;
+var item_x;
+var item_y;
+var canyon_x;
+var canyon_y;
 var floorPos_y;
 var isLeft;
 var isRight;
 var isFalling;
+var isFallingInCanyon;
 var isPlummeting;
 var jumpHeight;
-var adventurer;
+var isFound;
+var BACKGROUND_COLOR = [100,155,255];
+var adventurer = new Adventurer();
+var appleItem = new AppleCollectableItem();
+var canyon;
+var canyonWidth = 150;
 var lastDirection;
 var LastDirection = {
 	Left: 1,
 	Right: 2,
 };
+
 function setup()
 {
 	createCanvas(1024, 576);
@@ -30,15 +41,23 @@ function setup()
 	jumpHeight = floorPos_y - 200;
 	gameChar_x = width/2;
 	gameChar_y = floorPos_y;
+	item_x = gameChar_x - 50;
+	item_y = floorPos_y;
 	isLeft = false;
 	isRight = false;
 	isFalling = false;
 	isPlummeting = false;
+	isFound = false;
+	isFallingInCanyon = false;
 	lastDirection = LastDirection.Left;
+	canyon_x = gameChar_x + 200;
+	canyon_y = floorPos_y;
+	canyon = new Canyon(canyonWidth,  height - floorPos_y, BACKGROUND_COLOR);
 }
 
 function preload() {
-	adventurer = new Adventurer();
+	adventurer.load();
+	appleItem.load();
 }
 
 
@@ -47,7 +66,7 @@ function draw()
 	adventurer.onFrameChange(frameCount);
 	///////////DRAWING CODE//////////
 
-	background(100,155,255); //fill the sky blue
+	background(BACKGROUND_COLOR); //fill the sky blue
 
 
 	noStroke();
@@ -103,9 +122,23 @@ function draw()
 				? Adventurer.States.FacingLeft
 				: Adventurer.States.FacingRight);
 	}
+	if (!isFound) {
+		appleItem.draw(item_x, item_y);
+	}
+	canyon.draw(canyon_x, canyon_y);
 	adventurer.draw(gameChar_x, gameChar_y);
 	///////////INTERACTION CODE//////////
 	//Put conditional statements to move the game character below here
+	if (isFallingInCanyon) {
+		isFalling = true;
+		gameChar_y += 10;
+		return;
+	}
+	if (gameChar_y === floorPos_y && dist(gameChar_x, gameChar_y, canyon_x, canyon_y) < (canyonWidth / 2)) {
+		isFalling = true;
+		isFallingInCanyon = true;
+		return;
+	}
 	if (isRight) {
 		gameChar_x += 5;
 	}
@@ -124,6 +157,10 @@ function draw()
 	}
 	if (isFalling) {
 		gameChar_y += 10
+	}
+
+	if (!isFound && dist(gameChar_x, gameChar_y, item_x, item_y) < 16) {
+		isFound = true;
 	}
 }
 
