@@ -26,6 +26,8 @@ var isFound;
 var BACKGROUND_COLOR = [100,155,255];
 var adventurer = new Adventurer();
 var appleItem = new AppleCollectableItem();
+var smallTree = new SmallTree();
+var bigTree = new BigTree();
 var canyon;
 var canyonWidth = 150;
 var lastDirection;
@@ -33,6 +35,7 @@ var LastDirection = {
 	Left: 1,
 	Right: 2,
 };
+var trees_x;
 
 function setup()
 {
@@ -53,11 +56,14 @@ function setup()
 	canyon_x = gameChar_x + 200;
 	canyon_y = floorPos_y;
 	canyon = new Canyon(canyonWidth,  height - floorPos_y, BACKGROUND_COLOR);
+	trees_x = [150, 900];
 }
 
 function preload() {
 	adventurer.load();
 	appleItem.load();
+	smallTree.load();
+	bigTree.load();
 }
 
 
@@ -122,6 +128,17 @@ function draw()
 				? Adventurer.States.FacingLeft
 				: Adventurer.States.FacingRight);
 	}
+
+	/**
+	 * I could write a for loop here
+	 * for (var i = 0; i < trees_x.length; i++) {
+	 *     // draw a tree
+	 * }
+	 */
+	trees_x.forEach(function(x, index) {
+		var treeObject = index % 2 ? smallTree : bigTree
+		treeObject.draw(x, floorPos_y)
+	});
 	if (!isFound) {
 		appleItem.draw(item_x, item_y);
 	}
