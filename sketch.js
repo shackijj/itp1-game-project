@@ -28,6 +28,12 @@ var adventurer = new Adventurer();
 var appleItem = new AppleCollectableItem();
 var smallTree = new SmallTree();
 var bigTree = new BigTree();
+var canvasWidth = 1024;
+var canvasHeight = 640;
+var backBackground = new BackBackground(canvasWidth, canvasHeight);
+var frontBackground = new FrontBackground(canvasWidth, canvasHeight);
+var cloudsFrontBackground = new CloudsFrontBackground(canvasWidth, canvasHeight);
+var cloudsBackBackground = new CloudsBackBackground(canvasWidth, canvasHeight);
 var canyon;
 var canyonWidth = 150;
 var lastDirection;
@@ -36,10 +42,11 @@ var LastDirection = {
 	Right: 2,
 };
 var trees_x;
+var canvas;
 
 function setup()
 {
-	createCanvas(1024, 576);
+	canvas = createCanvas(canvasWidth, canvasHeight);
 	floorPos_y = height * 3/4;
 	jumpHeight = floorPos_y - 200;
 	gameChar_x = width/2;
@@ -64,24 +71,81 @@ function preload() {
 	appleItem.load();
 	smallTree.load();
 	bigTree.load();
+	backBackground.load();
+	frontBackground.load();
+	cloudsFrontBackground.load();
+	cloudsBackBackground.load();
 }
 
 
 function draw()
 {
 	adventurer.onFrameChange(frameCount);
-	///////////DRAWING CODE//////////
-
-	background(BACKGROUND_COLOR); //fill the sky blue
-
+	cloudsBackBackground.draw(0, 0);
+	cloudsFrontBackground.draw(0, 0);
+	backBackground.draw(0, 0);
+	frontBackground.draw(0, 0);
+	canyon.saveBackground(canyon_x, canyon_y, canvas);
 
 	noStroke();
 	fill(0,155,0);
 	rect(0, floorPos_y, width, height - floorPos_y); //draw some green ground
 
-	//draw the canyon
+	setGameCharState();
 
+	/**
+	 * I could write a for loop here
+	 * for (var i = 0; i < trees_x.length; i++) {
+	 *     // draw a tree
+	 * }
+	 */
+	trees_x.forEach(function(x, index) {
+		var treeObject = index % 2 ? smallTree : bigTree
+		treeObject.draw(x, floorPos_y)
+	});
+	if (!isFound) {
+		appleItem.draw(item_x, item_y);
+	}
+	canyon.draw(canyon_x, canyon_y);
+	adventurer.draw(gameChar_x, gameChar_y);
 
+	///////////INTERACTION CODE//////////
+	if (isFallingInCanyon) {
+		isFalling = true;
+		gameChar_y += 10;
+		return;
+	}
+	if (gameChar_y === floorPos_y && dist(gameChar_x, gameChar_y, canyon_x, canyon_y) < (canyonWidth / 2)) {
+		isFalling = true;
+		isFallingInCanyon = true;
+		return;
+	}
+	if (isRight) {
+		gameChar_x += 5;
+	}
+	if (isLeft) {
+		gameChar_x -= 5;
+	}
+	if (gameChar_y === jumpHeight) {
+		isPlummeting = false;
+		isFalling = true;
+	}
+	if (gameChar_y === floorPos_y) {
+		isFalling = false; 
+	}
+	if (isPlummeting) {
+		gameChar_y -= 10
+	}
+	if (isFalling) {
+		gameChar_y += 10
+	}
+
+	if (!isFound && dist(gameChar_x, gameChar_y, item_x, item_y) < 16) {
+		isFound = true;
+	}
+}
+
+function setGameCharState() {
 	//the game character
 	if(isLeft && isFalling)
 	{
@@ -127,57 +191,6 @@ function draw()
 			lastDirection === LastDirection.Left
 				? Adventurer.States.FacingLeft
 				: Adventurer.States.FacingRight);
-	}
-
-	/**
-	 * I could write a for loop here
-	 * for (var i = 0; i < trees_x.length; i++) {
-	 *     // draw a tree
-	 * }
-	 */
-	trees_x.forEach(function(x, index) {
-		var treeObject = index % 2 ? smallTree : bigTree
-		treeObject.draw(x, floorPos_y)
-	});
-	if (!isFound) {
-		appleItem.draw(item_x, item_y);
-	}
-	canyon.draw(canyon_x, canyon_y);
-	adventurer.draw(gameChar_x, gameChar_y);
-	///////////INTERACTION CODE//////////
-	//Put conditional statements to move the game character below here
-	if (isFallingInCanyon) {
-		isFalling = true;
-		gameChar_y += 10;
-		return;
-	}
-	if (gameChar_y === floorPos_y && dist(gameChar_x, gameChar_y, canyon_x, canyon_y) < (canyonWidth / 2)) {
-		isFalling = true;
-		isFallingInCanyon = true;
-		return;
-	}
-	if (isRight) {
-		gameChar_x += 5;
-	}
-	if (isLeft) {
-		gameChar_x -= 5;
-	}
-	if (gameChar_y === jumpHeight) {
-		isPlummeting = false;
-		isFalling = true;
-	}
-	if (gameChar_y === floorPos_y) {
-		isFalling = false; 
-	}
-	if (isPlummeting) {
-		gameChar_y -= 10
-	}
-	if (isFalling) {
-		gameChar_y += 10
-	}
-
-	if (!isFound && dist(gameChar_x, gameChar_y, item_x, item_y) < 16) {
-		isFound = true;
 	}
 }
 
