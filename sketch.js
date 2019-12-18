@@ -26,6 +26,7 @@ var isFound;
 var BACKGROUND_COLOR = [100,155,255];
 var adventurer;
 var appleItem;
+var ringItem;
 var smallTree;
 var bigTree;
 var canyon;
@@ -36,8 +37,15 @@ var LastDirection = {
 	Right: 2,
 };
 var trees_x;
+var clouds_x;
+var clouds_y;
 var scrollPos;
 var actualPos;
+var aCloud;
+var bCloud;
+var canyons_x;
+var mountain;
+var collectables_x;
 
 function setup()
 {
@@ -45,7 +53,6 @@ function setup()
 	floorPos_y = height * 3/4;
 	jumpHeight = floorPos_y - 200;
 	gameChar_x = width/2;
-	canyonWidth = 150;
 	actualGameChar_x = gameChar_x;
 	scrollPos = 0;
 	gameChar_y = floorPos_y;
@@ -60,19 +67,34 @@ function setup()
 	lastDirection = LastDirection.Left;
 	canyon_x = gameChar_x + 200;
 	canyon_y = floorPos_y;
+	canyonWidth = 150;
 	canyon = new Canyon(canyonWidth,  height - floorPos_y, BACKGROUND_COLOR);
-	trees_x = [150, 900];
+	trees_x = [-200, 150, 900, 1500];
+	clouds_x = [-450, 200, 700, 1600];
+	clouds_y = 300;
+
+	canyons_x = [-60, 700, 1200];
+	mountains_x = [-900, 430, 1800];
+	collectables_x = [100, 1400, 800, 400];
 }
 
 function preload() {
 	adventurer = new Adventurer();
 	appleItem = new AppleCollectableItem();
+	ringItem = new SilverRingCollectableItem();
 	smallTree = new SmallTree();
 	bigTree = new BigTree();
+	aCloud = new ACloud();
+	bCloud = new BCloud();
+	mountain = new Mountain();
 	adventurer.load();
 	appleItem.load();
 	smallTree.load();
 	bigTree.load();
+	aCloud.load();
+	bCloud.load();
+	mountain.load();
+	ringItem.load();
 }
 
 
@@ -86,14 +108,24 @@ function draw()
 	push();
 	translate(scrollPos, 0);
 	setGameCharState();
+	mountains_x.forEach(function(x) {
+		mountain.draw(x, floorPos_y);
+	});
+	clouds_x.forEach(function(x, index) {
+		var cloud = index % 2 ? aCloud : bCloud;
+		cloud.draw(x, clouds_y)
+	});
 	trees_x.forEach(function(x, index) {
 		var treeObject = index % 2 ? smallTree : bigTree
 		treeObject.draw(x, floorPos_y)
 	});
-	if (!isFound) {
-		appleItem.draw(item_x, item_y);
-	}
-	canyon.draw(canyon_x, canyon_y);
+	collectables_x.forEach(function(x, index) {
+		var object = index % 2 ? appleItem : ringItem;
+		object.draw(x, floorPos_y)
+	});
+	canyons_x.forEach(function(x) {
+		canyon.draw(x, floorPos_y);
+	});
 	pop();
 	adventurer.draw(gameChar_x, gameChar_y);
 
@@ -106,10 +138,15 @@ function processInteractions() {
 		gameChar_y += 10;
 		return;
 	}
-	if (gameChar_y === floorPos_y && dist(actualGameChar_x, gameChar_y, canyon_x, canyon_y) < (canyonWidth / 2)) {
-		isFalling = true;
-		isFallingInCanyon = true;
-		return;
+	if (gameChar_y === floorPos_y) {
+		var canyon = canyons_x.find(function(x) {
+			return dist(actualGameChar_x, gameChar_y, x, floorPos_y) < (canyonWidth / 2);
+		})
+		if (canyon) {
+			isFalling = true;
+			isFallingInCanyon = true;
+			return;
+		}
 	}
 	if (isRight) {
 		actualGameChar_x += 5;
@@ -139,10 +176,6 @@ function processInteractions() {
 	}
 	if (isFalling) {
 		gameChar_y += 10
-	}
-
-	if (!isFound && dist(gameChar_x, gameChar_y, item_x, item_y) < 16) {
-		isFound = true;
 	}
 }
 
