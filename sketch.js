@@ -108,6 +108,11 @@ function draw()
 	push();
 	translate(scrollPos, 0);
 	setGameCharState();
+	/**
+	 * for loop could be used instead of .forEach, but .forEach is better
+	 * because it's less error prone. We don't need to track .length and create
+	 * a variable for tracking the current index.
+	 */
 	mountains_x.forEach(function(x) {
 		mountain.draw(x, floorPos_y);
 	});
@@ -129,6 +134,10 @@ function draw()
 	pop();
 	adventurer.draw(gameChar_x, gameChar_y);
 
+	noStroke();
+    fill(0);
+    text('Press SPACE to jump', (width / 2) - 100, height - 10);
+	
 	processInteractions();
 }
 
