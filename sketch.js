@@ -1,14 +1,3 @@
-/*
-
-The Game Project
-
-Week 3
-
-Game interaction
-
-*/
-
-
 var gameChar_x;
 var gameChar_y;
 var item_x;
@@ -45,7 +34,7 @@ var aCloud;
 var bCloud;
 var canyons_x;
 var mountain;
-var collectables_x;
+var collectables;
 
 function setup()
 {
@@ -75,7 +64,12 @@ function setup()
 
 	canyons_x = [-60, 700, 1200];
 	mountains_x = [-900, 430, 1800];
-	collectables_x = [100, 1400, 800, 400];
+	collectables = [
+		{x: 100, isFound: false, obj: ringItem},
+		{x: 1400, isFound: false, obj: appleItem},
+		{x: 800, isFound: false, obj: ringItem},
+		{x: 400, isFound: false, obj: appleItem},
+	];
 }
 
 function preload() {
@@ -107,38 +101,59 @@ function draw()
 	rect(0, floorPos_y, width, height - floorPos_y); //draw some green ground
 	push();
 	translate(scrollPos, 0);
+
+	drawMountains();
+	drawClouds();
+	drawTrees();
+	drawCanyons();
+	drawCollectables();
+	pop();
+
+	drawGameChar();
+	processInteractions();
+}
+
+function drawGameChar() {
 	setGameCharState();
-	/**
-	 * for loop could be used instead of .forEach, but .forEach is better
-	 * because it's less error prone. We don't need to track .length and create
-	 * a variable for tracking the current index.
-	 */
-	mountains_x.forEach(function(x) {
-		mountain.draw(x, floorPos_y);
+	adventurer.draw(gameChar_x, gameChar_y);
+}
+
+function drawCollectables() {
+	collectables.forEach(function(collectable) {
+		if (!collectable.isFound) {
+			collectable.obj.draw(collectable.x, floorPos_y);
+		}
 	});
-	clouds_x.forEach(function(x, index) {
-		var cloud = index % 2 ? aCloud : bCloud;
-		cloud.draw(x, clouds_y)
+}
+
+function drawCanyons() {
+	canyons_x.forEach(function(x) {
+		canyon.draw(x, floorPos_y);
 	});
+}
+
+function drawTrees() {
 	trees_x.forEach(function(x, index) {
 		var treeObject = index % 2 ? smallTree : bigTree
 		treeObject.draw(x, floorPos_y)
 	});
-	collectables_x.forEach(function(x, index) {
-		var object = index % 2 ? appleItem : ringItem;
-		object.draw(x, floorPos_y)
-	});
-	canyons_x.forEach(function(x) {
-		canyon.draw(x, floorPos_y);
-	});
-	pop();
-	adventurer.draw(gameChar_x, gameChar_y);
+}
 
-	noStroke();
-    fill(0);
-    text('Press SPACE to jump', (width / 2) - 100, height - 10);
-	
-	processInteractions();
+function drawClouds() {
+	clouds_x.forEach(function(x, index) {
+		var cloud = index % 2 ? aCloud : bCloud;
+		cloud.draw(x, clouds_y)
+	});
+}
+
+function drawMountains() {
+	mountains_x.forEach(function(x) {
+		mountain.draw(x, floorPos_y);
+	});
+}
+
+function checkIfCollectableIsFound(collectable) {
+	return dist(actualGameChar_x, gameChar_y, collectable.x, floorPos_y) < 5;
 }
 
 function processInteractions() {
@@ -150,7 +165,7 @@ function processInteractions() {
 	if (gameChar_y === floorPos_y) {
 		var canyon = canyons_x.find(function(x) {
 			return dist(actualGameChar_x, gameChar_y, x, floorPos_y) < (canyonWidth / 2);
-		})
+		});
 		if (canyon) {
 			isFalling = true;
 			isFallingInCanyon = true;
@@ -186,6 +201,12 @@ function processInteractions() {
 	if (isFalling) {
 		gameChar_y += 10
 	}
+
+	collectables.forEach(function(collectable) {
+		if (!collectable.isFound) {
+			collectable.isFound = checkIfCollectableIsFound(collectable);
+		}
+	});
 }
 
 function setGameCharState() {
