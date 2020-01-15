@@ -45,7 +45,9 @@ var aCloud;
 var bCloud;
 var canyons_x;
 var mountain;
-var collectables_x;
+var collectables;
+var game_score;
+var fontRegular;
 
 function setup()
 {
@@ -72,10 +74,10 @@ function setup()
 	trees_x = [-200, 150, 900, 1500];
 	clouds_x = [-450, 200, 700, 1600];
 	clouds_y = 300;
-
+	game_score = 0;
 	canyons_x = [-60, 700, 1200];
 	mountains_x = [-900, 430, 1800];
-	collectables_x = [100, 1400, 800, 400];
+	collectables = [{x: 100}, {x: 1400}, {x: 800}, {x: 400}];
 }
 
 function preload() {
@@ -87,6 +89,7 @@ function preload() {
 	aCloud = new ACloud();
 	bCloud = new BCloud();
 	mountain = new Mountain();
+	fontRegular = loadFont('assets/PressStart2P-Regular.ttf');
 	adventurer.load();
 	appleItem.load();
 	smallTree.load();
@@ -124,9 +127,11 @@ function draw()
 		var treeObject = index % 2 ? smallTree : bigTree
 		treeObject.draw(x, floorPos_y)
 	});
-	collectables_x.forEach(function(x, index) {
-		var object = index % 2 ? appleItem : ringItem;
-		object.draw(x, floorPos_y)
+	collectables.forEach(function(item, index) {
+		if (!item.isFound) {
+			var object = index % 2 ? appleItem : ringItem;
+			object.draw(item.x, floorPos_y)
+		}
 	});
 	canyons_x.forEach(function(x) {
 		canyon.draw(x, floorPos_y);
@@ -134,14 +139,37 @@ function draw()
 	pop();
 	adventurer.draw(gameChar_x, gameChar_y);
 
-	noStroke();
-    fill(0);
-    text('Press SPACE to jump', (width / 2) - 100, height - 10);
-	
+	drawInstructions();
+	drawGameScore();
 	processInteractions();
 }
 
+function drawGameScore() {
+	noStroke();
+	fill(0);
+	textSize(16);
+	textFont(fontRegular)
+    text('SCORE: ' + game_score, width - 200, 32);
+}
+
+function drawInstructions() {
+	noStroke();
+	fill(0);
+	textSize(12);
+    text('Press SPACE to jump', (width / 2) - 100, height - 10);
+}
+
+function processCollectablesInteractions() {
+	collectables.forEach(function(item) {
+		if (!item.isFound && dist(actualGameChar_x, gameChar_y, item.x, floorPos_y) < 10) {
+			item.isFound = true;
+			game_score += 1;
+		}
+	});
+}
+
 function processInteractions() {
+	processCollectablesInteractions();
 	if (isFallingInCanyon) {
 		isFalling = true;
 		gameChar_y += 10;
