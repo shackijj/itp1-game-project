@@ -48,11 +48,16 @@ var mountain;
 var collectables;
 var game_score;
 var fontRegular;
+var lives;
 
-function setup()
-{
+function setup() {
 	createCanvas(1024, 640);
+	lives = 3;
 	floorPos_y = height * 3/4;
+	startGame();
+}
+
+function startGame() {
 	jumpHeight = floorPos_y - 200;
 	gameChar_x = width/2;
 	actualGameChar_x = gameChar_x;
@@ -77,7 +82,12 @@ function setup()
 	game_score = 0;
 	canyons_x = [-60, 700, 1200];
 	mountains_x = [-900, 430, 1800];
-	collectables = [{x: 100}, {x: 1400}, {x: 800}, {x: 400}];
+	collectables = [
+		{x: 100, isFound: false},
+		{x: 1400, isFound: false},
+		{x: 800, isFound: false},
+		{x: 400, isFound: false}
+	];
 }
 
 function preload() {
@@ -100,9 +110,11 @@ function preload() {
 	ringItem.load();
 }
 
-
-function draw()
-{
+function draw() {
+	if (lives === 0) {
+		drawInstructions('Game over. Press space to continue.');
+		return;
+	}
 	background(BACKGROUND_COLOR)
 	drawGround();
 	push();
@@ -136,9 +148,17 @@ function draw()
 	pop();
 	adventurer.draw(gameChar_x, gameChar_y);
 
-	drawInstructions();
 	drawGameScore();
 	processInteractions();
+	checkPlayerDie();
+}
+
+function drawInstructions(message) {
+	textSize(16);
+	textFont(fontRegular);
+	textAlign(CENTER);
+	fill(0);
+	text(message, (width / 2), height / 2);
 }
 
 function drawGround() {
@@ -148,18 +168,10 @@ function drawGround() {
 }
 
 function drawGameScore() {
-	noStroke();
-	fill(0);
 	textSize(16);
-	textFont(fontRegular)
-    text('SCORE: ' + game_score, width - 200, 32);
-}
-
-function drawInstructions() {
-	noStroke();
 	fill(0);
-	textSize(12);
-    text('Press SPACE to jump', (width / 2) - 100, height - 10);
+	textFont(fontRegular)
+    text('SCORE:' + game_score + ' LIVES:' + lives, width - 300, 32);
 }
 
 function processCollectablesInteractions() {
@@ -169,6 +181,15 @@ function processCollectablesInteractions() {
 			game_score += 1;
 		}
 	});
+}
+
+function checkPlayerDie() {
+	if (gameChar_y > height) {
+		if (lives > 0) {
+			lives -= 1;
+			startGame();
+		}
+	}
 }
 
 function processInteractions() {
