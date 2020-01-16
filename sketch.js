@@ -104,10 +104,7 @@ function preload() {
 function draw()
 {
 	background(BACKGROUND_COLOR)
-	adventurer.onFrameChange(frameCount);
-	noStroke();
-	fill(0,155,0);
-	rect(0, floorPos_y, width, height - floorPos_y); //draw some green ground
+	drawGround();
 	push();
 	translate(scrollPos, 0);
 	setGameCharState();
@@ -142,6 +139,12 @@ function draw()
 	drawInstructions();
 	drawGameScore();
 	processInteractions();
+}
+
+function drawGround() {
+	noStroke();
+	fill(0,155,0);
+	rect(0, floorPos_y, width, height - floorPos_y);
 }
 
 function drawGameScore() {

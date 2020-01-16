@@ -18,6 +18,7 @@
     };
     
     function Adventurer() {
+        this.frameCount = 0;
         this.state = Adventurer.States.FacingRight;
         this.standing = {
             frame: 0,
@@ -56,11 +57,12 @@
     /**
      * @param {number} count
      */
-    Adventurer.prototype.onFrameChange = function onFrameChange(count) {
-        this.updateStandingFrame(count);
-        this.updateWalkingFrame(count);
-        this.updatePlummetingFrame(count);
-        this.updateFallingFrame(count);
+    Adventurer.prototype.onFrameChange = function onFrameChange() {
+        this.frameCount += 1;
+        this.updateStandingFrame(this.frameCount);
+        this.updateWalkingFrame(this.frameCount);
+        this.updatePlummetingFrame(this.frameCount);
+        this.updateFallingFrame(this.frameCount);
     };
     
     Adventurer.prototype.resetPlummetingFrame = function resetPlummetingFrame() {
@@ -188,6 +190,7 @@
      * @type {number} y
      */
     Adventurer.prototype.draw = function draw(x, y) {
+        this.onFrameChange();
         this.x = x;
         this.y = y;
         switch(this.state) {
