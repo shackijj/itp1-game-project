@@ -49,6 +49,7 @@ var collectables;
 var game_score;
 var fontRegular;
 var lives;
+var flagpole;
 
 function setup() {
 	createCanvas(1024, 640);
@@ -82,6 +83,7 @@ function startGame() {
 	game_score = 0;
 	canyons_x = [-60, 700, 1200];
 	mountains_x = [-900, 430, 1800];
+	flagpole = {x: 2000, isReached: false};
 	collectables = [
 		{x: 100, isFound: false},
 		{x: 1400, isFound: false},
@@ -115,6 +117,10 @@ function draw() {
 		drawInstructions('Game over. Press space to continue.');
 		return;
 	}
+	if (flagpole.isReached) {
+		drawInstructions('Level complete. Press space to continue.');
+		return;
+	}
 	background(BACKGROUND_COLOR)
 	drawGround();
 	push();
@@ -145,12 +151,15 @@ function draw() {
 	canyons_x.forEach(function(x) {
 		canyon.draw(x, floorPos_y);
 	});
+	drawFlagpole();
 	pop();
+	
 	adventurer.draw(gameChar_x, gameChar_y);
-
 	drawGameScore();
+
 	processInteractions();
 	checkPlayerDie();
+	checkFlagpole();
 }
 
 function drawInstructions(message) {
@@ -158,7 +167,7 @@ function drawInstructions(message) {
 	textFont(fontRegular);
 	textAlign(CENTER);
 	fill(0);
-	text(message, (width / 2), height / 2);
+	text(message, (width / 2), 200);
 }
 
 function drawGround() {
@@ -167,10 +176,20 @@ function drawGround() {
 	rect(0, floorPos_y, width, height - floorPos_y);
 }
 
+function drawFlagpole() {
+	noStroke();
+	fill(200, 0, 0);
+	rect(flagpole.x, floorPos_y - 200, 100, 50);
+	strokeWeight(4);
+	stroke(0, 0, 0);
+	line(flagpole.x, floorPos_y - 200, flagpole.x, floorPos_y);
+}
+
 function drawGameScore() {
 	textSize(16);
 	fill(0);
 	textFont(fontRegular)
+	noStroke();
     text('SCORE:' + game_score + ' LIVES:' + lives, width - 300, 32);
 }
 
@@ -181,6 +200,12 @@ function processCollectablesInteractions() {
 			game_score += 1;
 		}
 	});
+}
+
+function checkFlagpole() {
+	if (actualGameChar_x > flagpole.x) {
+		flagpole.isReached = true;
+	}
 }
 
 function checkPlayerDie() {
