@@ -49,6 +49,20 @@
         this.drawSprite(x, y, SPRITE_SIZE[0] * COLUMN, SPRITE_SIZE[1] * ROW);
     }
 
+    function SilverRingCollectableItem() {
+        CollectableItem.apply(this);
+    }
+    function BallCollectableItem() {
+        CollectableItem.apply(this);
+    }
+    BallCollectableItem.prototype = new CollectableItem();
+    BallCollectableItem.prototype.draw = function(x, y) {
+        var ROW = 3;
+        var COLUMN = 2;
+        this.drawSprite(x, y, SPRITE_SIZE[0] * COLUMN, SPRITE_SIZE[1] * ROW);
+    }
+
+    window.BallCollectableItem = BallCollectableItem;
     window.AppleCollectableItem = AppleCollectableItem;
     window.SilverRingCollectableItem = SilverRingCollectableItem;
 })();

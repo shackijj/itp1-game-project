@@ -1,5 +1,6 @@
 var appleItem = new AppleCollectableItem();
 var silverRingItem = new SilverRingCollectableItem();
+var ballItem = new BallCollectableItem();
 var item_x;
 var item_y;
 
@@ -11,31 +12,30 @@ function setup () {
 function preload() {
     appleItem.load();
     silverRingItem.load();
+    ballItem.load();
+}
+
+function grid(x, y, cellWidth, cellHeight, rows, colums) {
+    var columnIndex = 0;
+    var result = [];
+    for (var rowIndex = 0; rowIndex < rows; rowIndex++) {
+        result.push([]);
+        for(var columnIndex = 0; columnIndex < colums; columnIndex++) {
+            stroke(100);
+            noFill();
+            const cellX = x + columnIndex * cellWidth;
+            const cellY = y + rowIndex * cellHeight;
+            rect(cellX, cellY, cellWidth, cellHeight);
+            result[rowIndex].push({x: cellX + cellWidth / 2, y: cellY + cellHeight});
+        }
+    }
+    return result;
 }
 
 function draw () {
     background(255);
-    // Standing, facing frontwards
-
-    stroke(100);
-    noFill();
-    rect(20, 60, 200, 148);
-    noStroke();
-    fill(0);
-    text('1. Apple', 20, 228);
-    item_x = 120;
-    item_y = 208;
-    appleItem.draw(item_x, item_y);
-
-    // Jumping facing forwards
-    stroke(100);
-    noFill();
-    rect(240, 60, 200, 148);
-    noStroke();
-    fill(0);
-    text('2. Ring', 240, 228);
-
-    item_x = 340;
-    item_y = 208;
-    silverRingItem.draw(item_x, item_y);
+    var table = grid(0, 0, 100, 100, 1, 3);
+    appleItem.draw(table[0][0].x, table[0][0].y);
+    silverRingItem.draw(table[0][1].x, table[0][1].y);
+    ballItem.draw(table[0][2].x, table[0][2].y);
 }
