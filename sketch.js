@@ -1,5 +1,4 @@
-var gameChar_x;
-var gameChar_y;
+var player;
 var item_x;
 var item_y;
 var canyon_x;
@@ -49,12 +48,19 @@ function setup() {
 }
 
 function startGame() {
+	player = {
+		x: width / 2,
+		y: floorPos_y,
+		actual: {
+			x: width / 2
+		}
+	};
 	jumpHeight = floorPos_y - 200;
-	gameChar_x = width/2;
-	actualGameChar_x = gameChar_x;
+	player.x = width/2;
+	player.actual.x = player.x;
 	scrollPos = 0;
-	gameChar_y = floorPos_y;
-	item_x = gameChar_x - 50;
+	player.y = floorPos_y;
+	item_x = player.x - 50;
 	item_y = floorPos_y;
 	isLeft = false;
 	isRight = false;
@@ -63,7 +69,7 @@ function startGame() {
 	isFound = false;
 	isFallingInCanyon = false;
 	lastDirection = LastDirection.Left;
-	canyon_x = gameChar_x + 200;
+	canyon_x = player.x + 200;
 	canyon_y = floorPos_y;
 	canyonWidth = 150;
 	canyon = new Canyon(canyonWidth,  height - floorPos_y, BACKGROUND_COLOR);
@@ -146,7 +152,7 @@ function draw() {
 	drawFlagpole();
 	pop();
 	
-	adventurer.draw(gameChar_x, gameChar_y);
+	adventurer.draw(player.x, player.y);
 	drawGameScore();
 	drawLives();
 
@@ -195,7 +201,7 @@ function drawGameScore() {
 
 function processCollectablesInteractions() {
 	collectables.forEach(function(item) {
-		if (!item.isFound && dist(actualGameChar_x, gameChar_y, item.x, floorPos_y) < 10) {
+		if (!item.isFound && dist(player.actual.x, player.y, item.x, floorPos_y) < 10) {
 			item.isFound = true;
 			game_score += 1;
 		}
@@ -203,13 +209,13 @@ function processCollectablesInteractions() {
 }
 
 function checkFlagpole() {
-	if (actualGameChar_x > flagpole.x) {
+	if (player.actual.x > flagpole.x) {
 		flagpole.isReached = true;
 	}
 }
 
 function checkPlayerDie() {
-	if (gameChar_y > height) {
+	if (player.y > height) {
 		if (lives > 0) {
 			lives -= 1;
 			startGame();
@@ -221,12 +227,12 @@ function processInteractions() {
 	processCollectablesInteractions();
 	if (isFallingInCanyon) {
 		isFalling = true;
-		gameChar_y += 10;
+		player.y += 10;
 		return;
 	}
-	if (gameChar_y === floorPos_y) {
+	if (player.y === floorPos_y) {
 		var canyon = canyons_x.find(function(x) {
-			return dist(actualGameChar_x, gameChar_y, x, floorPos_y) < (canyonWidth / 2);
+			return dist(player.actual.x, player.y, x, floorPos_y) < (canyonWidth / 2);
 		})
 		if (canyon) {
 			isFalling = true;
@@ -235,33 +241,33 @@ function processInteractions() {
 		}
 	}
 	if (isRight) {
-		actualGameChar_x += 5;
-		if(gameChar_x < width * 0.8) {
-			gameChar_x  += 5;
+		player.actual.x += 5;
+		if(player.x < width * 0.8) {
+			player.x  += 5;
 		} else {
 			scrollPos -= 5; // negative for moving against the background
 		}
 	}
 	if (isLeft) {
-		actualGameChar_x -= 5;
-		if(gameChar_x > width * 0.2) {
-			gameChar_x -= 5;
+		player.actual.x -= 5;
+		if(player.x > width * 0.2) {
+			player.x -= 5;
 		} else {
 			scrollPos += 5;
 		}
 	}
-	if (gameChar_y === jumpHeight) {
+	if (player.y === jumpHeight) {
 		isPlummeting = false;
 		isFalling = true;
 	}
-	if (gameChar_y === floorPos_y) {
+	if (player.y === floorPos_y) {
 		isFalling = false; 
 	}
 	if (isPlummeting) {
-		gameChar_y -= 10
+		player.y -= 10
 	}
 	if (isFalling) {
-		gameChar_y += 10
+		player.y += 10
 	}
 }
 
