@@ -1,14 +1,3 @@
-/*
-
-The Game Project
-
-Week 3
-
-Game interaction
-
-*/
-
-
 var gameChar_x;
 var gameChar_y;
 var item_x;
@@ -50,6 +39,7 @@ var game_score;
 var fontRegular;
 var lives;
 var flagpole;
+var ballItem;
 
 function setup() {
 	createCanvas(1024, 640);
@@ -96,6 +86,7 @@ function preload() {
 	adventurer = new Adventurer();
 	appleItem = new AppleCollectableItem();
 	ringItem = new SilverRingCollectableItem();
+	ballItem = new BallCollectableItem();
 	smallTree = new SmallTree();
 	bigTree = new BigTree();
 	aCloud = new ACloud();
@@ -110,6 +101,7 @@ function preload() {
 	bCloud.load();
 	mountain.load();
 	ringItem.load();
+	ballItem.load();
 }
 
 function draw() {
@@ -156,6 +148,7 @@ function draw() {
 	
 	adventurer.draw(gameChar_x, gameChar_y);
 	drawGameScore();
+	drawLives();
 
 	processInteractions();
 	checkPlayerDie();
@@ -185,12 +178,19 @@ function drawFlagpole() {
 	line(flagpole.x, floorPos_y - 200, flagpole.x, floorPos_y);
 }
 
+
+function drawLives() {
+	for(var i = 0; i < lives; i++) {
+		ballItem.draw(width - 120 + (45 * i), 40)
+	}
+}
+
 function drawGameScore() {
 	textSize(16);
 	fill(0);
 	textFont(fontRegular)
 	noStroke();
-    text('SCORE:' + game_score + ' LIVES:' + lives, width - 300, 32);
+    text('SCORE:' + game_score + ' LIVES:', width - 370, 32);
 }
 
 function processCollectablesInteractions() {

@@ -49,9 +49,6 @@
         this.drawSprite(x, y, SPRITE_SIZE[0] * COLUMN, SPRITE_SIZE[1] * ROW);
     }
 
-    function SilverRingCollectableItem() {
-        CollectableItem.apply(this);
-    }
     function BallCollectableItem() {
         CollectableItem.apply(this);
     }
