@@ -29,7 +29,7 @@
     }
     
     function SmallTree() {
-        Tree(this);
+        Tree.apply(this);
     }
     
     SmallTree.prototype = new Tree();
@@ -40,7 +40,7 @@
     
     
     function BigTree() {
-        Tree(this);
+        Tree.apply(this);
     }
     BigTree.prototype = new Tree();
     BigTree.prototype.draw = function(x, y) {
