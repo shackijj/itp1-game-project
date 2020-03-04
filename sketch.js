@@ -91,12 +91,6 @@ function preload() {
 	bCloud = new BCloud();
 	mountain = new Mountain();
 	fontRegular = loadFont('assets/PressStart2P-Regular.ttf');
-	appleItem.load();
-	aCloud.load();
-	bCloud.load();
-	mountain.load();
-	ringItem.load();
-	ballItem.load();
 }
 
 function draw() {

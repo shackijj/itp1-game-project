@@ -1,6 +1,6 @@
-var appleItem = new AppleCollectableItem();
-var silverRingItem = new SilverRingCollectableItem();
-var ballItem = new BallCollectableItem();
+var appleItem;
+var silverRingItem;
+var ballItem;
 var item_x;
 var item_y;
 
@@ -10,9 +10,9 @@ function setup () {
 }
 
 function preload() {
-    appleItem.load();
-    silverRingItem.load();
-    ballItem.load();
+    appleItem = new AppleCollectableItem();
+    silverRingItem = new SilverRingCollectableItem();
+    ballItem = new BallCollectableItem();
 }
 
 function grid(x, y, cellWidth, cellHeight, rows, colums) {

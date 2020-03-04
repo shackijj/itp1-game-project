@@ -3,9 +3,6 @@
         this.size = [366, 193]
         this.offsetX = this.size[0] / 2
         this.offsetY = this.size[1];
-    }
-    
-    Mountain.prototype.load = function() {
         this.spritesheet = loadImage("/mountain/mountain.png");
     }
     

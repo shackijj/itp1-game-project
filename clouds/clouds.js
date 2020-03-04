@@ -6,8 +6,8 @@
         this.offsetY = CLOUD_SIZE[1];
     }
     
-    Cloud.prototype.load = function() {
-        this.spritesheet = loadImage(this.url);
+    Cloud.prototype.load = function(url) {
+        this.spritesheet = loadImage(url);
     }
     
     Cloud.prototype.draw = function(x, y) {
@@ -23,15 +23,15 @@
     }
     
     function ACloud() {
-        this.url = "/clouds/cloud-a.png";
-        Cloud.apply(this)
+        Cloud.apply(this);
+        this.load("/clouds/cloud-a.png");
     }
     
     ACloud.prototype = new Cloud();
     
     function BCloud() {
-        this.url = "/clouds/cloud-b.png";
-        Cloud.apply(this)
+        Cloud.apply(this);
+        this.load("/clouds/cloud-b.png");
     }
     
     BCloud.prototype = new Cloud();

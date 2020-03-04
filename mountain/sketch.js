@@ -8,7 +8,7 @@ function setup () {
 }
 
 function preload() {
-    mountain.load();
+   mountain = new Mountain();
 }
 
 function draw () {

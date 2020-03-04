@@ -5,6 +5,9 @@
     function Tree() {
         this.offsetX = COLLECTABLE_ITEM_SIZE[0] / 2
         this.offsetY = COLLECTABLE_ITEM_SIZE[1];
+    }
+    
+    Tree.prototype.load = function() {
         this.spritesheet = loadImage("/trees/Trees.png");
     }
     
@@ -27,9 +30,10 @@
     
     function SmallTree() {
         Tree.apply(this);
+        this.load();
     }
     
-    SmallTree.prototype = Tree.prototype;
+    SmallTree.prototype = new Tree();
     SmallTree.prototype.draw = function(x, y) {
         var ROW = 0;
         this.drawSprite(x, y, 0, SPRITE_SIZE[1] * ROW);
@@ -38,8 +42,9 @@
     
     function BigTree() {
         Tree.apply(this);
+        this.load();
     }
-    BigTree.prototype = Tree.prototype;
+    BigTree.prototype = new Tree();
     BigTree.prototype.draw = function(x, y) {
         var ROW = 0;
         var COLUMN = 1;

@@ -1,5 +1,5 @@
-var aCloud = new ACloud();
-var bCloud = new BCloud();
+var aCloud;
+var bCloud;
 var item_x;
 var item_y;
 
@@ -9,8 +9,8 @@ function setup () {
 }
 
 function preload() {
-    aCloud.load();
-    bCloud.load();
+    aCloud = new ACloud();
+    bCloud = new BCloud();
 }
 
 function draw () {

@@ -30,6 +30,7 @@
     
     function AppleCollectableItem() {
         CollectableItem.apply(this);
+        this.load();
     }
     
     AppleCollectableItem.prototype = new CollectableItem();
@@ -41,6 +42,7 @@
     
     function SilverRingCollectableItem() {
         CollectableItem.apply(this);
+        this.load();
     }
     SilverRingCollectableItem.prototype = new CollectableItem();
     SilverRingCollectableItem.prototype.draw = function(x, y) {
@@ -51,6 +53,7 @@
 
     function BallCollectableItem() {
         CollectableItem.apply(this);
+        this.load();
     }
     BallCollectableItem.prototype = new CollectableItem();
     BallCollectableItem.prototype.draw = function(x, y) {
