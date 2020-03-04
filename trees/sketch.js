@@ -1,5 +1,5 @@
-var smallTree = new SmallTree();
-var bigTree = new BigTree();
+var smallTree;
+var bigTree;
 var item_x;
 var item_y;
 
@@ -9,8 +9,8 @@ function setup () {
 }
 
 function preload() {
-    smallTree.load();
-    bigTree.load();
+    smallTree = new SmallTree();
+    bigTree = new BigTree();
 }
 
 function draw () {

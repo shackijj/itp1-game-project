@@ -91,10 +91,7 @@ function preload() {
 	bCloud = new BCloud();
 	mountain = new Mountain();
 	fontRegular = loadFont('assets/PressStart2P-Regular.ttf');
-	adventurer.load();
 	appleItem.load();
-	smallTree.load();
-	bigTree.load();
 	aCloud.load();
 	bCloud.load();
 	mountain.load();

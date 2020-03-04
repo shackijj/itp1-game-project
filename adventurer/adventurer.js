@@ -43,6 +43,7 @@
             y: 0,
         };
         this.safari = this.isSafari();
+        this.load();
     }
     
     Adventurer.prototype.load = function () {
