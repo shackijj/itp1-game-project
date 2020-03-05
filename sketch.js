@@ -64,16 +64,20 @@ function startGame() {
 	isFound = false;
 	lastDirection = LastDirection.Left;
 	platforms = [
-		new Platform(player.x - 10, floorPosY, 200),
-		new Platform(player.x - 400, floorPosY - 40, 200),
+		new Platform(-1000, floorPosY, 550),
+		new Platform(-300, floorPosY, 900),
+		new Platform(750, floorPosY, 300),
+		new Platform(300, floorPosY - 120, 150),
+		new Platform(1200, floorPosY - 50, 150),
+		new Platform(1350, floorPosY, 1000),
 	];
 	gameScore = 0;
 	flagpole = {x: 2000, isReached: false};
 	collectables = [
-		{x: 100, isFound: false},
-		{x: 1400, isFound: false},
-		{x: 800, isFound: false},
-		{x: 400, isFound: false}
+		{x: 100, y: floorPosY, isFound: false},
+		{x: 1400, y: floorPosY, isFound: false},
+		{x: 800, y: floorPosY, isFound: false},
+		{x: 375, y: floorPosY - 120, isFound: false}
 	];
 }
 
@@ -112,7 +116,6 @@ function draw() {
 	drawPlatforms();
 
 	pop();
-	
 	adventurer.draw(player.x, player.y);
 	drawGameScore();
 	drawLives();
@@ -132,7 +135,7 @@ function drawCollectables() {
 	collectables.forEach(function(item, index) {
 		if (!item.isFound) {
 			var object = index % 2 ? appleItem : ringItem;
-			object.draw(item.x, floorPosY)
+			object.draw(item.x, item.y)
 		}
 	});
 }
@@ -197,7 +200,7 @@ function drawGameScore() {
 
 function processCollectablesInteractions() {
 	collectables.forEach(function(item) {
-		if (!item.isFound && dist(player.actual.x, player.y, item.x, floorPosY) < 10) {
+		if (!item.isFound && dist(player.actual.x, player.y, item.x, item.y) < 10) {
 			item.isFound = true;
 			gameScore += 1;
 		}
@@ -225,7 +228,9 @@ function checkIfThePlayerIsOnPlatform() {
 		if (
 			player.actual.x >= platform.x &&
 			player.actual.x <= platform.x + platform.length) {
-			return platform.y - player.y === 0;
+			if (platform.y - player.y === 0) {
+				return true ;
+			}
 		}
 	}
 	return false;
@@ -242,7 +247,7 @@ function processInteractions() {
 	}
 	if (isRight) {
 		player.actual.x += 5;
-		if (player.x < width * 0.8) {
+		if (player.x < width * 0.6) {
 			player.x  += 5;
 		} else {
 			scrollPos -= 5; // negative for moving against the background
@@ -250,7 +255,7 @@ function processInteractions() {
 	}
 	if (isLeft) {
 		player.actual.x -= 5;
-		if(player.x > width * 0.2) {
+		if(player.x > width * 0.4) {
 			player.x -= 5;
 		} else {
 			scrollPos += 5;
