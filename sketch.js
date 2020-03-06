@@ -64,18 +64,18 @@ function startGame() {
 	isFound = false;
 	lastDirection = LastDirection.Left;
 	platforms = [
-		new Platform(-1000, floorPosY, 550),
-		new Platform(-300, floorPosY, 900),
+		new Platform(-1000, floorPosY, 64 * 9),
+		new Platform(-300, floorPosY, 64 * 14 ),
 		new Platform(750, floorPosY, 300),
-		new Platform(300, floorPosY - 120, 150),
-		new Platform(1200, floorPosY - 50, 150),
-		new Platform(1350, floorPosY, 1000),
+		new Platform(300, floorPosY - 120, 64 * 3),
+		new Platform(1200, floorPosY - 50, 64 * 3),
+		new Platform(1400, floorPosY, 1000),
 	];
 	gameScore = 0;
 	flagpole = {x: 2000, isReached: false};
 	collectables = [
 		{x: 100, y: floorPosY, isFound: false},
-		{x: 1400, y: floorPosY, isFound: false},
+		{x: 1500, y: floorPosY, isFound: false},
 		{x: 800, y: floorPosY, isFound: false},
 		{x: 375, y: floorPosY - 120, isFound: false}
 	];

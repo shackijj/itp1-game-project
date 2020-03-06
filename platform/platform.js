@@ -1,12 +1,36 @@
 (function() {
+    var REAL_SIZE = 64;
+    var SPRITE_SIZE = 16;
     function Platform(x, y, length) {
         this.x = x;
         this.y = y;
         this.length = length;
+        this.spritesheet = loadImage('/platform/Tileset.png')
+    }
+
+    Platform.prototype.drawSprite = function(x, y, sx, sy) {
+        push();
+        noSmooth();
+        image(
+            this.spritesheet,
+            x - REAL_SIZE / 2,
+            y,
+            REAL_SIZE,
+            REAL_SIZE,
+            sx,
+            sy,
+            SPRITE_SIZE,
+            SPRITE_SIZE,
+        );
+        pop();
     }
 
     Platform.prototype.draw = function() {
-        rect(this.x, this.y, this.length, 10);
+        this.drawSprite(this.x, this.y, SPRITE_SIZE * 6, SPRITE_SIZE * 2);
+        for(var i = REAL_SIZE; i < this.length; i += REAL_SIZE) {
+            this.drawSprite(this.x + i, this.y, SPRITE_SIZE * 8, SPRITE_SIZE * 2);    
+        }
+        this.drawSprite(this.x + this.length, this.y, SPRITE_SIZE * 9, SPRITE_SIZE * 2);
     }
 
     window.Platform = Platform;
