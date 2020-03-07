@@ -6,6 +6,7 @@ var CLOUDS_X = [-450, 200, 700, 1600];
 var CLOUDS_POSTION_Y = 300;
 var CANVAS_WIDTH = 1024;
 var CANVAS_HEIGHT = 640;
+var JUMP_ACCEL = 180;
 
 // enums
 var LastDirection = {
@@ -54,6 +55,7 @@ function startGame() {
 	player = {
 		x: width / 2,
 		y: floorPosY,
+		jumpAccel: 0,
 		actual: {
 			x: width / 2
 		}
@@ -283,12 +285,13 @@ function processInteractions() {
 			scrollPos += 5;
 		}
 	}
-	if (player.y === jumpHeight) {
+	if (player.jumpAccel === 0 && isPlummeting) {
 		isPlummeting = false;
 		isFalling = true;
-	}
+	} 
 	if (isPlummeting) {
 		player.y -= 10;
+		player.jumpAccel -= 10;
 	}
 	if (isFalling) {
 		player.y += 10;
@@ -343,6 +346,7 @@ function keyPressed()
 	if (keyCode === SPACEBAR_CODE && !(isPlummeting || isFalling)) {
 		adventurer.resetPlummetingFrame();
 		isPlummeting = true;
+		player.jumpAccel = JUMP_ACCEL ;
 	}
 }
 
