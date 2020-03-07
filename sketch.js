@@ -3,7 +3,6 @@ var BACKGROUND_COLOR = [100,155,255];
 var CANYON_WIDTH = 150;
 var TREES_X = [-200, 150, 900, 1500];
 var CLOUDS_X = [-450, 200, 700, 1600];
-var MOUNTAINS_X = [-900, 430, 1800];
 var CLOUDS_POSTION_Y = 300;
 var CANVAS_WIDTH = 1024;
 var CANVAS_HEIGHT = 640;
@@ -97,7 +96,6 @@ function preload() {
 	bigTree = new BigTree();
 	aCloud = new ACloud();
 	bCloud = new BCloud();
-	mountain = new Mountain();
 	backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
 	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
 	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -114,16 +112,11 @@ function draw() {
 		drawInstructions('Level complete. Press space to continue.');
 		return;
 	}
-	background(BACKGROUND_COLOR)
-	cloudsBackBackground.draw(0, 0);
-	cloudsFrontBackground.draw(0, 0);
-	backBackground.draw(0, 0);
-	frontBackground.draw(0, 0);
+	drawBackground();
 	push();
 	translate(scrollPos, 0);
 	setGameCharState();
 
-	drawMountains();
 	drawClouds();
 	drawTrees();
 	drawCollectables();
@@ -149,6 +142,23 @@ function drawPlatforms() {
 	});
 }
 
+function drawBackground() {
+	var PARALAX_RATIO = -0.2;
+	var deltaX = scrollPos * PARALAX_RATIO;
+	cloudsBackBackground.draw(0 - deltaX, 0);
+	cloudsBackBackground.draw(0 - CANVAS_WIDTH - deltaX, 0);
+	cloudsBackBackground.draw(CANVAS_WIDTH - deltaX, 0);
+	cloudsFrontBackground.draw(0 - deltaX, 0);
+	cloudsFrontBackground.draw(0 - CANVAS_WIDTH - deltaX, 0);
+	cloudsFrontBackground.draw(CANVAS_WIDTH - deltaX, 0);
+	backBackground.draw(0 - deltaX, 0);
+	backBackground.draw(0 - CANVAS_WIDTH - deltaX, 0);
+	backBackground.draw(CANVAS_WIDTH - deltaX, 0);
+	frontBackground.draw(0 - deltaX, 0);
+	frontBackground.draw(0 - CANVAS_WIDTH - deltaX, 0);
+	frontBackground.draw(CANVAS_WIDTH - deltaX, 0);
+}
+
 function drawCollectables() {
 	collectables.forEach(function(item, index) {
 		if (!item.isFound) {
@@ -162,12 +172,6 @@ function drawTrees() {
 	TREES_X.forEach(function(x, index) {
 		var treeObject = index % 2 ? smallTree : bigTree
 		treeObject.draw(x, floorPosY)
-	});
-}
-
-function drawMountains() {
-	MOUNTAINS_X.forEach(function(x) {
-		mountain.draw(x, floorPosY);
 	});
 }
 
@@ -273,7 +277,7 @@ function processInteractions() {
 	}
 	if (isLeft) {
 		player.actual.x -= 5;
-		if(player.x > width * 0.4) {
+		if (player.x > width * 0.4) {
 			player.x -= 5;
 		} else {
 			scrollPos += 5;
