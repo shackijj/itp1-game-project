@@ -1,3 +1,35 @@
+/**
+ * Extenstion 1 Add advanced graphics
+ * 
+ * As to add advanced graphic I used sprites (https://en.wikipedia.org/wiki/Sprite_(computer_graphics))
+ * It means that images are used for representing object in the game world. The main advantage of
+ * using sprites is that we can use images created in a graphics editor rather than drawing them
+ * using code. It significally reduces amout of code.
+ * 
+ * Spritesheet animation allowed to me to make the game characted looking alive.
+ * See the implementation in adventurer/adventurer.js file. The principle behind
+ * this technique is the same as used in usual animation. An image used for
+ * drawing the game character is changed over a constant time interval.
+ * 
+ * The most difficult thing was to find images because there is a lot of the on the Internet.
+ * I used https://itch.io/ website because images there are grouped into categories and 
+ * most of images are free.
+ */
+
+/**
+ * Extension 3 Create platforms
+ * 
+ * First, I created a platform class (platform/platform.js). Then, removed floor and canyons
+ * with platforms. So, now if a game characted is not standing on a platform his is falling.
+ * This allowed me to use sprites for drawing background of the game.
+ * 
+ * Second, I added two variables for platforms platformsBackground and platformsForeground as to
+ * draw them on top of each other. It's useful for creating hills where a game char can jump onto.
+ * 
+ * This extension was not hard to implement because the material provided in the lecure 
+ * is very helpful.
+ */
+
 // constants
 var BACKGROUND_COLOR = [100,155,255];
 var CANYON_WIDTH = 150;
@@ -6,7 +38,7 @@ var CLOUDS_X = [-450, 200, 700, 1600];
 var CLOUDS_POSTION_Y = 300;
 var CANVAS_WIDTH = 1024;
 var CANVAS_HEIGHT = 640;
-var JUMP_ACCEL = 180;
+var JUMP_ACCEL = 200;
 
 // enums
 var LastDirection = {
@@ -41,7 +73,7 @@ var lives;
 var flagpole;
 var ballItem;
 var platforms;
-var platformBackground;
+var platformsBackground;
 var platformsForeground;
 
 function setup() {
@@ -121,9 +153,9 @@ function draw() {
 
 	drawClouds();
 	drawTrees();
-	drawCollectables();
 	drawFlagpole();
 	drawPlatforms();
+	drawCollectables();
 
 	pop();
 	adventurer.draw(player.x, player.y);
