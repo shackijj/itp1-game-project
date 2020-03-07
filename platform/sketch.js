@@ -7,7 +7,7 @@ function setup () {
     createCanvas(1000, 1000);
     tableForTiles = new Table(0, 0, 16, 16, 6, 10);
     table = new Table(0, 100, 256, 256, 1, 1);
-    platform = new Platform(table.grid[0][0].x - 50, table.grid[0][0].y, 64);
+    platform = new Platform(table.grid[0][0].x - 64, table.grid[0][0].y, 128);
 }
 
 function preload() {
@@ -22,7 +22,7 @@ function Table(x, y, cellWidth, cellHeight, rows, colums) {
         for(var columnIndex = 0; columnIndex < colums; columnIndex++) {
             const cellX = x + columnIndex * cellWidth;
             const cellY = y + rowIndex * cellHeight;
-            this.grid[rowIndex].push({x: cellX + cellWidth / 2, y: cellY + cellHeight});
+            this.grid[rowIndex].push({x: cellX + cellWidth / 2, y: cellY});
         }
     }
     this.draw = function() {

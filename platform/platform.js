@@ -25,12 +25,30 @@
         pop();
     }
 
-    Platform.prototype.draw = function() {
+    Platform.prototype.drawGrass = function() {
+        this.drawSprite(this.x, this.y - REAL_SIZE, SPRITE_SIZE * 6, SPRITE_SIZE * 1);
         this.drawSprite(this.x, this.y, SPRITE_SIZE * 6, SPRITE_SIZE * 2);
         for(var i = REAL_SIZE; i < this.length; i += REAL_SIZE) {
+            this.drawSprite(this.x + i, this.y - REAL_SIZE, SPRITE_SIZE * 7, SPRITE_SIZE * 1);
             this.drawSprite(this.x + i, this.y, SPRITE_SIZE * 8, SPRITE_SIZE * 2);    
         }
+        this.drawSprite(this.x + this.length, this.y - REAL_SIZE, SPRITE_SIZE * 9, SPRITE_SIZE * 1);
         this.drawSprite(this.x + this.length, this.y, SPRITE_SIZE * 9, SPRITE_SIZE * 2);
+    }
+
+    Platform.prototype.draw = function() {
+        this.drawSprite(this.x, this.y, SPRITE_SIZE * 0, SPRITE_SIZE * 0);
+        this.drawSprite(this.x, this.y + REAL_SIZE, SPRITE_SIZE * 0, SPRITE_SIZE * 1);
+        this.drawSprite(this.x, this.y + REAL_SIZE * 2, SPRITE_SIZE * 0, SPRITE_SIZE * 2);
+        for(var i = REAL_SIZE; i < this.length; i += REAL_SIZE) {
+            this.drawSprite(this.x + i, this.y, SPRITE_SIZE * 1, SPRITE_SIZE * 0);
+            this.drawSprite(this.x + i, this.y + REAL_SIZE, SPRITE_SIZE * 1, SPRITE_SIZE * 1);
+            this.drawSprite(this.x + i, this.y + REAL_SIZE * 2, SPRITE_SIZE * 1, SPRITE_SIZE * 2);
+        }
+        this.drawSprite(this.x + this.length, this.y, SPRITE_SIZE * 2, SPRITE_SIZE * 0);
+        this.drawSprite(this.x + this.length, this.y + REAL_SIZE, SPRITE_SIZE * 2, SPRITE_SIZE * 1);
+        this.drawSprite(this.x + this.length, this.y + REAL_SIZE * 2, SPRITE_SIZE * 2, SPRITE_SIZE * 2);
+        this.drawGrass();
     }
 
     window.Platform = Platform;

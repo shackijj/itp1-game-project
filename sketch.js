@@ -5,6 +5,8 @@ var TREES_X = [-200, 150, 900, 1500];
 var CLOUDS_X = [-450, 200, 700, 1600];
 var MOUNTAINS_X = [-900, 430, 1800];
 var CLOUDS_POSTION_Y = 300;
+var CANVAS_WIDTH = 1024;
+var CANVAS_HEIGHT = 640;
 
 // enums
 var LastDirection = {
@@ -39,9 +41,11 @@ var lives;
 var flagpole;
 var ballItem;
 var platforms;
+var platformBackground;
+var platformsForeground;
 
 function setup() {
-	createCanvas(1024, 640);
+	createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 	lives = 3;
 	floorPosY = height * 3/4;
 	startGame();
@@ -63,14 +67,17 @@ function startGame() {
 	isPlummeting = false;
 	isFound = false;
 	lastDirection = LastDirection.Left;
-	platforms = [
+	platformsBackground = [
+		new Platform(300, floorPosY - 120, 64 * 3),
+	];
+	platformsForeground = [
 		new Platform(-1000, floorPosY, 64 * 9),
 		new Platform(-300, floorPosY, 64 * 14 ),
 		new Platform(750, floorPosY, 300),
-		new Platform(300, floorPosY - 120, 64 * 3),
 		new Platform(1200, floorPosY - 50, 64 * 3),
 		new Platform(1400, floorPosY, 1000),
 	];
+	platforms = platformsBackground.concat(platformsForeground);
 	gameScore = 0;
 	flagpole = {x: 2000, isReached: false};
 	collectables = [
@@ -91,6 +98,10 @@ function preload() {
 	aCloud = new ACloud();
 	bCloud = new BCloud();
 	mountain = new Mountain();
+	backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
+	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
+	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
+	cloudsBackBackground = new CloudsBackBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
 	fontRegular = loadFont('assets/PressStart2P-Regular.ttf');
 }
 
@@ -104,6 +115,10 @@ function draw() {
 		return;
 	}
 	background(BACKGROUND_COLOR)
+	cloudsBackBackground.draw(0, 0);
+	cloudsFrontBackground.draw(0, 0);
+	backBackground.draw(0, 0);
+	frontBackground.draw(0, 0);
 	push();
 	translate(scrollPos, 0);
 	setGameCharState();
@@ -126,7 +141,10 @@ function draw() {
 }
 
 function drawPlatforms() {
-	platforms.forEach((platform) => {
+	platformsBackground.forEach((platform) => {
+		platform.draw();
+	});
+	platformsForeground.forEach((platform) => {
 		platform.draw();
 	});
 }
