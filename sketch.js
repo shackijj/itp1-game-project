@@ -139,11 +139,11 @@ function preload() {
 
 function draw() {
 	if (lives === 0) {
-		drawInstructions('Game over. Press space to continue.');
+		drawInstructions('Game over. Reload page to play again.');
 		return;
 	}
 	if (flagpole.isReached) {
-		drawInstructions('Level complete. Press space to continue.');
+		drawInstructions('Level complete. Reload page to play again.');
 		return;
 	}
 	drawBackground();
