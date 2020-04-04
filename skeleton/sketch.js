@@ -1,11 +1,14 @@
-var skeleton;
+var skeleton1;
+var skeleton2;
 
 function setup () {
     createCanvas(1000, 1000);
 }
 
 function preload() {
-    skeleton = new Skeleton();
+    skeleton1 = new Skeleton();
+    skeleton2 = new Skeleton();
+    skeleton2.setState(SkeletonState.MovingRight);
 }
 
 function grid(x, y, cellWidth, cellHeight, rows, colums) {
@@ -27,6 +30,7 @@ function grid(x, y, cellWidth, cellHeight, rows, colums) {
 
 function draw () {
     background(255);
-    var table = grid(0, 0, 150, 200, 1, 4);
-    skeleton.draw(0, 0)
+    var table = grid(0, 0, 200, 200, 1, 2);
+    skeleton2.draw(table[0][0].x, table[0][0].y);
+    skeleton1.draw(table[0][1].x, table[0][1].y);
 }
