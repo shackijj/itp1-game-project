@@ -58,6 +58,17 @@
         setState(state) {
             this.state = state;
         }
+        checkContact(gc_x, gc_y,enemy_x,enemy_y) {
+            var d = dist(gc_x, gc_y, enemy_x,enemy_y);
+
+            if(d < 55)
+            {
+                return true;
+            }      
+
+            return false;
+
+        }
     }
 
     class SkeletonEnemy extends Enemy {

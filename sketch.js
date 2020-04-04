@@ -82,6 +82,7 @@ var skeleton;
 var enemies;
 var mushroom;
 var spells;
+var flyingEye;
 
 function setup() {
 	createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -92,7 +93,7 @@ function setup() {
 }
 
 function startGame() {
-    gameState = 1 ;
+    gameState = 0;
 	player = {
 		x: width / 2,
 		y: floorPosY,
@@ -156,6 +157,7 @@ function startGame() {
 	];
 
 	enemies = [
+		{x: 0, y: floorPosY, direction: -1, range: 50, curStep: 0, renderer: flyingEye, isDead: false},
 		{x: 100, y: floorPosY, direction: -1, range: 50, curStep: 0, renderer: skeleton, isDead: false},
 		{x: 900, y: floorPosY, direction: -1, range: 70, curStep: 0, renderer: mushroom, isDead: false},
 	]
@@ -176,6 +178,7 @@ function preload() {
 	bCloud = new BCloud();
 	skeleton = new Skeleton()
 	mushroom = new MushroomEnemy();
+	flyingEye = new FlyingEyeEnemy();
 	backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
 	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
 	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
@@ -195,10 +198,8 @@ function preload() {
 function draw() {
     //Game state of 0 means title screen
     if (gameState == 0)
-    {
-        background(100, 100, 200);
-        
-        text('Press a key to begin', (width / 2), 200)
+    {   
+        drawInstructions('Press a key to begin')
     }
     
     if (gameState == 1)
@@ -241,6 +242,7 @@ function drawSpells()
 	spells.spells.forEach(function(spell) {
 		spell.updateSpell();
 	});
+	spells.updateSpells();
 }
 
 function drawPlatforms() {
@@ -298,7 +300,7 @@ function drawInstructions(message) {
 	textSize(16);
 	textFont(fontRegular);
 	textAlign(CENTER);
-	fill(0);
+	fill(255);
 	text(message, (width / 2), 200);
 }
 
@@ -328,6 +330,18 @@ function drawEnemies() {
 	enemies.forEach(function(enemy) {
 		if (enemy.isDead) {
 			return;
+		}
+		var isContact = skeleton.checkContact(player.actual.x, player.y,enemy.x, enemy.y);
+		//checkContact(player.x, player.y,enemy.x, enemy.y);
+		
+		if(isContact)
+		{
+		   if(lives > 0)
+		   {
+               //Take a life and start the game again
+			   lives -= 1;
+			   startGame();
+		   }
 		}
 		if (enemy.direction > 0) {
 			enemy.renderer.setState(EnemyState.MovingRight);

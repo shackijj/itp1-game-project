@@ -17,6 +17,12 @@ class SpellContainer
         this.currentSpell = spell;
     }
 
+    updateSpells() {
+        this.spells = this.spells.filter(function(spell) {
+            return spell.toDestroy !== true;
+        });
+    }
+
     keyPressed(playerX, playerY, isLeft)
     {
         switch(keyCode)
@@ -40,9 +46,6 @@ class SpellContainer
 
     hitCheck(enemyX, enemyY)
     {
-        this.spells = this.spells.filter(function(spell) {
-            return spell.toDestroy !== true;
-        });
         for (var i = 0; i < this.spells.length; i++)
         {
             if (dist(enemyX, enemyY, this.spells[i].x, this.spells[i].y) < 80) {
