@@ -28,6 +28,10 @@
  * 
  * This extension was not hard to implement because the material provided in the lecure 
  * is very helpful.
+ 
+ 
+ 
+ * I am making a test comment here
  */
 
 // constants
