@@ -78,6 +78,8 @@ var platformsForeground;
 var level;
 var sounds;
 var gameState;
+var skeleton;
+var enemies;
 
 function setup() {
 	createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -87,7 +89,7 @@ function setup() {
 }
 
 function startGame() {
-    gameState = 0;
+    gameState = 1 ;
 	player = {
 		x: width / 2,
 		y: floorPosY,
@@ -149,6 +151,10 @@ function startGame() {
 		{x: 800, y: floorPosY, isFound: false},
 		{x: 375, y: floorPosY - 120, isFound: false}
 	];
+
+	enemies = [
+		{x: 100, y: floorPosY, direction: -1, range: 50, curStep: 0}
+	]
 }
 
 
@@ -164,6 +170,7 @@ function preload() {
 	bigTree = new BigTree();
 	aCloud = new ACloud();
 	bCloud = new BCloud();
+	skeleton = new Skeleton()
 	backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
 	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
 	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
@@ -208,6 +215,7 @@ function draw() {
         drawFlagpole();
         drawPlatforms();
         drawCollectables();
+		drawEnemies();
 
         pop();
         adventurer.draw(player.x, player.y);
@@ -217,7 +225,8 @@ function draw() {
         processInteractions();
         checkPlayerDie();
         checkFlagpole();
-    }
+	}
+	updateEnemies();
 }
 
 function drawPlatforms() {
@@ -299,6 +308,28 @@ function drawLives() {
 	for(var i = 0; i < lives; i++) {
 		ballItem.draw(width - 120 + (45 * i), 40)
 	}
+}
+
+function drawEnemies() {
+	enemies.forEach(function(enemy) {
+		if (enemy.direction > 0) {
+			skeleton.setState(SkeletonState.MovingRight);
+		} else {
+			skeleton.setState(SkeletonState.MovingLeft);
+		}
+		skeleton.draw(enemy.x, enemy.y);
+	})
+}
+
+function updateEnemies() {
+	enemies.forEach(function(enemy) {
+		enemy.x += enemy.direction;
+		enemy.curStep += 1;
+		if (enemy.curStep === enemy.range) {
+			enemy.curStep = 0;
+			enemy.direction *= -1;
+		}
+	})
 }
 
 function drawGameScore() {

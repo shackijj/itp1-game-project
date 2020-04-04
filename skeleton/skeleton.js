@@ -13,7 +13,6 @@
 
     class Skeleton {
         constructor() {
-            console.log('skeleton');
             this._load();
             this.animationStep = 0;
             this.frameCount = 0;
@@ -28,7 +27,7 @@
 
         }
 
-        _drawSprite = function () {
+        _drawSprite = function (x, y) {
             var xMultiplier = 1;
             if (this.state === SkeletonState.MovingLeft) {
                 scale(-1.0, 1.0);
@@ -38,8 +37,8 @@
             noSmooth();
             image(
                 this.spritesheet,
-                xMultiplier * (this.x - X_OFFSET),
-                this.y - Y_OFFSET,
+                xMultiplier * (x - X_OFFSET),
+                y - Y_OFFSET,
                 xMultiplier * AREA_WIDTH,
                 AREA_HEIGHT,
                 SPRITE_WIDTH * this.animationStep,
@@ -55,10 +54,8 @@
             }
             if (this.animationStep > 3) {
                 this.animationStep = 0;
-            }
-            this.x = x;
-            this.y = y;
-            this._drawSprite(0, 0);
+             }
+            this._drawSprite(x, y);
         }
 
         setState(state) {
