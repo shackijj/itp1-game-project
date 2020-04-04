@@ -76,8 +76,6 @@ var platforms;
 var platformsBackground;
 var platformsForeground;
 
-//Jamie test
-
 function setup() {
 	createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 	lives = 3;
