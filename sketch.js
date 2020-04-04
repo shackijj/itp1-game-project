@@ -75,6 +75,9 @@ var ballItem;
 var platforms;
 var platformsBackground;
 var platformsForeground;
+var level;
+var sounds;
+var gameState;
 
 function setup() {
 	createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -84,6 +87,7 @@ function setup() {
 }
 
 function startGame() {
+    gameState = 0;
 	player = {
 		x: width / 2,
 		y: floorPosY,
@@ -121,7 +125,11 @@ function startGame() {
 	];
 }
 
+
+
+
 function preload() {
+    level = 1;
 	adventurer = new Adventurer();
 	appleItem = new AppleCollectableItem();
 	ringItem = new SilverRingCollectableItem();
@@ -130,41 +138,60 @@ function preload() {
 	bigTree = new BigTree();
 	aCloud = new ACloud();
 	bCloud = new BCloud();
-	backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
-	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
-	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
-	cloudsBackBackground = new CloudsBackBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
+	backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	cloudsBackBackground = new CloudsBackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
 	fontRegular = loadFont('assets/PressStart2P-Regular.ttf');
+    
+    sounds = {dieSound : loadSound("sounds/die.flac"),
+             jumpSound : loadSound("sounds/jump.wav"),
+             music : loadSound("sounds/forest.mp3"),
+             fireballSound : loadSound("sounds/fireball.wav"),
+             magnetSpellSound : loadSound("sounds/magnet.wav"),
+             getSpellSound : loadSound("sounds/getspell.wav"),
+             getCollectableSound : loadSound("sounds/getspell.wav")};
 }
 
 function draw() {
-	if (lives === 0) {
-		drawInstructions('Game over. Reload page to play again.');
-		return;
-	}
-	if (flagpole.isReached) {
-		drawInstructions('Level complete. Reload page to play again.');
-		return;
-	}
-	drawBackground();
-	push();
-	translate(scrollPos, 0);
-	setGameCharState();
+    //Game state of 0 means title screen
+    if (gameState == 0)
+    {
+        background(100, 100, 200);
+        
+        text('Press a key to begin', (width / 2), 200)
+    }
+    
+    if (gameState == 1)
+    {
+        if (lives === 0) {
+            drawInstructions('Game over. Reload page to play again.');
+            return;
+        }
+        if (flagpole.isReached) {
+            drawInstructions('Level complete. Reload page to play again.');
+            return;
+        }
+        drawBackground();
+        push();
+        translate(scrollPos, 0);
+        setGameCharState();
 
-	drawClouds();
-	drawTrees();
-	drawFlagpole();
-	drawPlatforms();
-	drawCollectables();
+        drawClouds();
+        drawTrees();
+        drawFlagpole();
+        drawPlatforms();
+        drawCollectables();
 
-	pop();
-	adventurer.draw(player.x, player.y);
-	drawGameScore();
-	drawLives();
+        pop();
+        adventurer.draw(player.x, player.y);
+        drawGameScore();
+        drawLives();
 
-	processInteractions();
-	checkPlayerDie();
-	checkFlagpole();
+        processInteractions();
+        checkPlayerDie();
+        checkFlagpole();
+    }
 }
 
 function drawPlatforms() {
@@ -266,6 +293,7 @@ function processCollectablesInteractions() {
 function checkFlagpole() {
 	if (player.actual.x > flagpole.x) {
 		flagpole.isReached = true;
+        changeLevel();
 	}
 }
 
@@ -367,6 +395,12 @@ var SPACEBAR_CODE = 32;
 
 function keyPressed()
 {
+    if(gameState == 0)
+    {   
+        gameState = 1;
+        sounds.music.play();
+    }
+    
 	if (keyCode === LEFT_ARROW_CODE) {
 		isLeft = true;
 		lastDirection = LastDirection.Left;
@@ -379,6 +413,7 @@ function keyPressed()
 		adventurer.resetPlummetingFrame();
 		isPlummeting = true;
 		player.jumpAccel = JUMP_ACCEL ;
+        sounds.jumpSound.play();
 	}
 }
 
@@ -390,4 +425,15 @@ function keyReleased()
 	if (keyCode === RIGHT_ARROW_CODE) {
 		isRight = false;
 	}
+}
+
+function changeLevel()
+{
+    level = 2;
+    backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	cloudsBackBackground = new CloudsBackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+    
+    flagpole.isReached = false;
 }

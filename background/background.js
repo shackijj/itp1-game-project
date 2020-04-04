@@ -21,29 +21,30 @@ Background.prototype.draw = function(x, y) {
     pop();
 }
 
-function BackBackground(width, height) {
-    Background.apply(this, ["/background/back-background.png", width, height])
+function BackBackground(width, height, level) {
+    Background.apply(this, ["/background/Level " +  level + "/back-background.png", width, height])
     this.load();
 }
 
 BackBackground.prototype = new Background();
 
-function FrontBackground(width, height) {
-    Background.apply(this, ["/background/front-background.png", width, height]);
+function FrontBackground(width, height, level) {
+    Background.apply(this, ["/background/Level " +  level + "/front-background.png", width, height]);
     this.load();
 }
 
 FrontBackground.prototype = new Background();
 
-function CloudsFrontBackground(width, height) {
-    Background.apply(this, ["/background/clouds-front-background.png", width, height]);
+function CloudsFrontBackground(width, height, level) {
+    console.log(level);
+    Background.apply(this, ["/background/Level " +  level + "/clouds-front-background.png", width, height]);
     this.load();
 }
 
 CloudsFrontBackground.prototype = new Background();
 
-function CloudsBackBackground(width, height) {
-    Background.apply(this, ["/background/clouds-back-background.png", width, height]);
+function CloudsBackBackground(width, height, level) {
+    Background.apply(this, ["/background/Level " +  level + "/clouds-back-background.png", width, height]);
     this.load();
 }
 
