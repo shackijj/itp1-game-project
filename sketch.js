@@ -77,6 +77,7 @@ var platformsBackground;
 var platformsForeground;
 var level;
 var sounds;
+var gameState;
 
 function setup() {
 	createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -86,6 +87,7 @@ function setup() {
 }
 
 function startGame() {
+    gameState = 1;
 	player = {
 		x: width / 2,
 		y: floorPosY,
@@ -145,39 +147,48 @@ function preload() {
     sounds = {dieSound : loadSound("sounds/die.wav"),
              jumpSound : loadSound("sounds/jump.wav"),
              music : loadSound("sounds/forest.mp3"),
-             fireballSound : loadSound("sounds/"),
-             magnetSpellSound : loadSound("sounds/"),
+             fireballSound : loadSound("sounds/fireball.wav"),
+             magnetSpellSound : loadSound("sounds/magnet.wav"),
              getSpellSound : loadSound("sounds/getspell.wav")};
 }
 
 function draw() {
-	if (lives === 0) {
-		drawInstructions('Game over. Reload page to play again.');
-		return;
-	}
-	if (flagpole.isReached) {
-		drawInstructions('Level complete. Reload page to play again.');
-		return;
-	}
-	drawBackground();
-	push();
-	translate(scrollPos, 0);
-	setGameCharState();
+    //Game state of 0 means title screen
+    if (gameState == 0)
+    {
+        
+    }
+    
+    if (gameState == 1)
+    {
+        if (lives === 0) {
+            drawInstructions('Game over. Reload page to play again.');
+            return;
+        }
+        if (flagpole.isReached) {
+            drawInstructions('Level complete. Reload page to play again.');
+            return;
+        }
+        drawBackground();
+        push();
+        translate(scrollPos, 0);
+        setGameCharState();
 
-	drawClouds();
-	drawTrees();
-	drawFlagpole();
-	drawPlatforms();
-	drawCollectables();
+        drawClouds();
+        drawTrees();
+        drawFlagpole();
+        drawPlatforms();
+        drawCollectables();
 
-	pop();
-	adventurer.draw(player.x, player.y);
-	drawGameScore();
-	drawLives();
+        pop();
+        adventurer.draw(player.x, player.y);
+        drawGameScore();
+        drawLives();
 
-	processInteractions();
-	checkPlayerDie();
-	checkFlagpole();
+        processInteractions();
+        checkPlayerDie();
+        checkFlagpole();
+    }
 }
 
 function drawPlatforms() {
