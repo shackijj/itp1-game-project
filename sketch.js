@@ -87,7 +87,7 @@ function setup() {
 }
 
 function startGame() {
-    gameState = 1;
+    gameState = 0;
 	player = {
 		x: width / 2,
 		y: floorPosY,
@@ -144,19 +144,22 @@ function preload() {
 	cloudsBackBackground = new CloudsBackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
 	fontRegular = loadFont('assets/PressStart2P-Regular.ttf');
     
-    sounds = {dieSound : loadSound("sounds/die.wav"),
+    sounds = {dieSound : loadSound("sounds/die.flac"),
              jumpSound : loadSound("sounds/jump.wav"),
              music : loadSound("sounds/forest.mp3"),
              fireballSound : loadSound("sounds/fireball.wav"),
              magnetSpellSound : loadSound("sounds/magnet.wav"),
-             getSpellSound : loadSound("sounds/getspell.wav")};
+             getSpellSound : loadSound("sounds/getspell.wav"),
+             getCollectableSound : loadSound("sounds/getspell.wav")};
 }
 
 function draw() {
     //Game state of 0 means title screen
     if (gameState == 0)
     {
+        background(100, 100, 200);
         
+        text('Press a key to begin', (width / 2), 200)
     }
     
     if (gameState == 1)
@@ -392,6 +395,12 @@ var SPACEBAR_CODE = 32;
 
 function keyPressed()
 {
+    if(gameState == 0)
+    {   
+        gameState = 1;
+        sounds.music.play();
+    }
+    
 	if (keyCode === LEFT_ARROW_CODE) {
 		isLeft = true;
 		lastDirection = LastDirection.Left;
