@@ -2,6 +2,12 @@ let enemyX;
 let enemyY;
 
 let spell;
+var sprite;
+
+function preload()
+{
+    sprite = loadImage("/spells/fireball.png");
+}
 
 function setup()
 {
@@ -12,7 +18,9 @@ function setup()
     enemyY = 300;
 
     spellContainer = new SpellContainer();
-    spellContainer.addSpell(new FireSpell(100, 300, 1));
+    spellContainer.addSpell({spellType: "fire", array: []});
+    spellContainer.addSpell({spellType: "ice", array: []});
+    spellContainer.addSpell({spellType: "air", array: []});
 }
 
 function draw()
@@ -22,10 +30,27 @@ function draw()
 
     //Enemy
     rect(enemyX,enemyY,100,200);
-    if(spellContainer.castSpell)
+
+    if(spellContainer.castFire)
     {
-        spellContainer.currentSpell.updateSpell();
+        for(let i = 0; i < spellContainer.spells[0].array.length; i++)
+        {
+           
+            if(spellContainer.spells[0].array[i].lifeTime >= 100)
+            {
+                spellContainer.spells[0].array.splice(0,1);
+                console.log("Called");
+                
+            }
+            else{
+                spellContainer.spells[0].array[i].updateSpell();     
+            }
+             
+        }
+    
     }
+
+    
 
 }
 

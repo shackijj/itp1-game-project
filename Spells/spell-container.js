@@ -5,7 +5,13 @@ class SpellContainer
         this.spells = [];
         this.currentSpell = null;
 
-        this.castSpell = false;
+        this.castFire = false;
+        this.castIce = false;
+        this.castAir = false;
+
+        this.playerX = 100;
+        this.playerY = 300;
+        this.direction = 1;
     }
 
     addSpell(spell)
@@ -31,11 +37,19 @@ class SpellContainer
                 this.changeSpell(this.spells[0]);
                 break;
             case 32:
-                this.currentSpell.updateSpell();
-                this.castSpell = true;
+                this.currentSpell.array.push(new FireSpell(
+                    this.playerX, 
+                    this.playerY, 
+                    this.direction));
+                this.castFire = true;
             default:
                 break;
         }
+    }
+
+    hitCheck(enemyX, enemyY)
+    {
+        
     }
 
 }
