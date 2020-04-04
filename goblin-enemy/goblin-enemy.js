@@ -6,26 +6,24 @@
     var AREA_WIDTH = 450;
     var AREA_HEIGHT = 450;
 
-    var FlyingEyeEnemyState = {
+    var GoblinEnemyState = {
         MovingLeft: 1,
-        MovingRight: 2,
-        AttackLeft:3,
-        AttackRight:4
+        MovingRight: 2
     };
 
-    class FlyingEyeEnemy {
+    class GoblinEnemy {
 
         constructor() {
 
-            console.log('flying eyed monster');
+            console.log('goblin monster');
             this._load();
             this.animationStep = 0;
             this.frameCount = 0;
-            this.state = FlyingEyeEnemyState.MovingLeft;
+            this.state = GoblinEnemyState.MovingLeft;
         }
 
         _load() {
-            this.spritesheet = loadImage("/flying-eye-enemy/flight.png");
+            this.spritesheet = loadImage("/goblin-enemy/walk.png");
         }
 
         _onFrameChange() {
@@ -35,7 +33,7 @@
 
         _drawSprite = function () {
             var xMultiplier = 1;
-            if (this.state === FlyingEyeEnemyState.MovingLeft) {
+            if (this.state === GoblinEnemyState.MovingLeft) {
                 scale(-1.0, 1.0);
                 xMultiplier = -1;
             }
@@ -74,7 +72,6 @@
 
     }
 
-
-    window.FlyingEyeEnemy = FlyingEyeEnemy;
-    window.FlyingEyeEnemyState = FlyingEyeEnemyState;
+    window.GoblinEnemy = GoblinEnemy;
+    window.GoblinEnemyState = GoblinEnemyState;
 })();

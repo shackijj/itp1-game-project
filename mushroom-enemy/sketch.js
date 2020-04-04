@@ -1,14 +1,14 @@
-var flyingEye1;
-var flyingEye2;
+var mushroom1;
+var mushroom2;
 
 function setup () {
     createCanvas(1000, 1000);
 }
 
 function preload() {
-    flyingEye1 = new FlyingEyeEnemy();
-    flyingEye2 = new FlyingEyeEnemy();
-    flyingEye2.setState(FlyingEyeEnemyState.MovingRight);
+    mushroom1 = new MushroomEnemy();
+    mushroom2 = new MushroomEnemy();
+    mushroom2.setState(MushroomEnemyState.MovingRight);
 }
 
 function grid(x, y, cellWidth, cellHeight, rows, colums) {
@@ -31,6 +31,6 @@ function grid(x, y, cellWidth, cellHeight, rows, colums) {
 function draw () {
     background(255);
     var table = grid(0, 0, 200, 200, 1, 2);
-    flyingEye2.draw(table[0][0].x, table[0][0].y);
-    flyingEye1.draw(table[0][1].x, table[0][1].y);
+    mushroom2.draw(table[0][0].x, table[0][0].y);
+    mushroom1.draw(table[0][1].x, table[0][1].y);
 }
