@@ -375,7 +375,7 @@ function keyPressed()
 		isRight = true;
 		lastDirection = LastDirection.Right;
 	}
-	if (keyCode === SPACEBAR_CODE && !(isPlummeting || isFalling)) {
+	if ((keyCode === SPACEBAR_CODE || keyCode == 38) && !(isPlummeting || isFalling)) {
 		adventurer.resetPlummetingFrame();
 		isPlummeting = true;
 		player.jumpAccel = JUMP_ACCEL ;
