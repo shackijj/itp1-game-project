@@ -17,7 +17,7 @@ class SpellContainer
         this.currentSpell = spell;
     }
 
-    keyPressed(playerX, playerY)
+    keyPressed(playerX, playerY, isLeft)
     {
         switch(keyCode)
         {
@@ -30,7 +30,7 @@ class SpellContainer
                     new FireSpell(
                         playerX, 
                         playerY, 
-                        this.direction)
+                        isLeft ? 0 : 1)
                 );
                 this.castFire = true;
             default:

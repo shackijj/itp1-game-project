@@ -498,7 +498,7 @@ function keyPressed()
 {
     if(keyCode == FIREBALL_CODE)
     {
-		spells.keyPressed(player.x, player.y);
+		spells.keyPressed(player.x, player.y, isLeft);
     }
     
     if(gameState == 0)
