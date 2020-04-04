@@ -87,8 +87,7 @@ function setup() {
 	lives = 3;
 	floorPosY = height * 3/4;
 	startGame();
-    spells = new SpellContainer(player.x, player.y);
-    spells.addSpell({spellType: "fire", array: []}, player.x, player.y);
+    spells = new SpellContainer();
 }
 
 function startGame() {
@@ -232,28 +231,13 @@ function draw() {
 	}
 	updateEnemies();
     drawSpells();
-    console.log(player.x);
-    
 }
 
 function drawSpells()
 {
-    if(spells.castFire)
-    {
-        for(let i = 0; i < spells.spells[0].array.length; i++)
-        {
-           
-            if(spells.spells[0].array[i].lifeTime >= 100)
-            {
-                spells.spells[0].array.splice(0,1);
-                console.log("Called");
-            }
-            else{
-                spells.spells[0].array[i].updateSpell();     
-            }
-             
-        }
-    }
+	spells.spells.forEach(function(spell) {
+		spell.updateSpell();
+	});
 }
 
 function drawPlatforms() {
@@ -514,10 +498,7 @@ function keyPressed()
 {
     if(keyCode == FIREBALL_CODE)
     {
-        for(var i = 0; i < spells.length; i++)
-        {
-            spells[i].updateSpell(player.actual.x, player.y);
-        }
+		spells.keyPressed(player.x, player.y, isLeft);
     }
     
     if(gameState == 0)
@@ -540,8 +521,6 @@ function keyPressed()
 		player.jumpAccel = JUMP_ACCEL ;
         sounds.jumpSound.play();
 	}
-    
-    spells.keyPressed();
 }
 
 function keyReleased()

@@ -1,6 +1,6 @@
 class SpellContainer
 {
-    constructor(playerX, playerY)
+    constructor()
     {
         this.spells = [];
         this.currentSpell = null;
@@ -9,21 +9,7 @@ class SpellContainer
         this.castIce = false;
         this.castAir = false;
 
-        this.playerX = playerX;
-        this.playerY = playerY;
         this.direction = 1;
-    }
-
-    addSpell(spell, playerX, playerY)
-    {
-        this.playerX = playerX;
-        this.playerY = playerY;
-        this.spells.push(spell);
-
-        if(this.currentSpell == null)
-        {
-            this.currentSpell = this.spells[0];
-        }
     }
 
     changeSpell(spell)
@@ -31,7 +17,7 @@ class SpellContainer
         this.currentSpell = spell;
     }
 
-    keyPressed()
+    keyPressed(playerX, playerY, isLeft)
     {
         switch(keyCode)
         {
@@ -39,10 +25,13 @@ class SpellContainer
                 this.changeSpell(this.spells[0]);
                 break;
             case 70:
-                this.currentSpell.array.push(new FireSpell(
-                    this.playerX, 
-                    this.playerY, 
-                    this.direction));
+                console.log('spell added')
+                this.spells.push(
+                    new FireSpell(
+                        playerX, 
+                        playerY, 
+                        isLeft ? 0 : 1)
+                );
                 this.castFire = true;
             default:
                 break;

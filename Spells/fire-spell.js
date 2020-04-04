@@ -16,7 +16,7 @@ class FireSpell
         this.y = y;
     }
 
-    updateSpell(x, y)
+    updateSpell()
     {
         image(sprite, this.x, this.y);
 
