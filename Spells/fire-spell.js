@@ -10,8 +10,13 @@ class FireSpell
         this.lifeTime = 0;
     }
 
+    updatePosition(x, y)
+    {
+        this.x = x;
+        this.y = y;
+    }
 
-    updateSpell()
+    updateSpell(x, y)
     {
         image(sprite, this.x, this.y);
 

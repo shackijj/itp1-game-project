@@ -80,12 +80,15 @@ var sounds;
 var gameState;
 var skeleton;
 var enemies;
+var spells;
 
 function setup() {
 	createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 	lives = 3;
 	floorPosY = height * 3/4;
 	startGame();
+    spells = new SpellContainer(player.x, player.y);
+    spells.addSpell({spellType: "fire", array: []}, player.x, player.y);
 }
 
 function startGame() {
@@ -184,6 +187,7 @@ function preload() {
              magnetSpellSound : loadSound("sounds/magnet.wav"),
              getSpellSound : loadSound("sounds/getspell.wav"),
              getCollectableSound : loadSound("sounds/getspell.wav")};
+    sprite = loadImage("/spells/fireball.png");
 }
 
 function draw() {
@@ -227,6 +231,29 @@ function draw() {
         checkFlagpole();
 	}
 	updateEnemies();
+    drawSpells();
+    console.log(player.x);
+    
+}
+
+function drawSpells()
+{
+    if(spells.castFire)
+    {
+        for(let i = 0; i < spells.spells[0].array.length; i++)
+        {
+           
+            if(spells.spells[0].array[i].lifeTime >= 100)
+            {
+                spells.spells[0].array.splice(0,1);
+                console.log("Called");
+            }
+            else{
+                spells.spells[0].array[i].updateSpell();     
+            }
+             
+        }
+    }
 }
 
 function drawPlatforms() {
@@ -481,9 +508,18 @@ function setGameCharState() {
 var LEFT_ARROW_CODE = 37;
 var RIGHT_ARROW_CODE = 39;
 var SPACEBAR_CODE = 32;
+var FIREBALL_CODE = 70;
 
 function keyPressed()
 {
+    if(keyCode == FIREBALL_CODE)
+    {
+        for(var i = 0; i < spells.length; i++)
+        {
+            spells[i].updateSpell(player.actual.x, player.y);
+        }
+    }
+    
     if(gameState == 0)
     {   
         gameState = 1;
@@ -504,6 +540,8 @@ function keyPressed()
 		player.jumpAccel = JUMP_ACCEL ;
         sounds.jumpSound.play();
 	}
+    
+    spells.keyPressed();
 }
 
 function keyReleased()

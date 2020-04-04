@@ -1,6 +1,6 @@
 class SpellContainer
 {
-    constructor()
+    constructor(playerX, playerY)
     {
         this.spells = [];
         this.currentSpell = null;
@@ -9,13 +9,15 @@ class SpellContainer
         this.castIce = false;
         this.castAir = false;
 
-        this.playerX = 100;
-        this.playerY = 300;
+        this.playerX = playerX;
+        this.playerY = playerY;
         this.direction = 1;
     }
 
-    addSpell(spell)
+    addSpell(spell, playerX, playerY)
     {
+        this.playerX = playerX;
+        this.playerY = playerY;
         this.spells.push(spell);
 
         if(this.currentSpell == null)
@@ -36,7 +38,7 @@ class SpellContainer
             case 49:
                 this.changeSpell(this.spells[0]);
                 break;
-            case 32:
+            case 70:
                 this.currentSpell.array.push(new FireSpell(
                     this.playerX, 
                     this.playerY, 

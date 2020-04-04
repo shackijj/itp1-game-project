@@ -3,6 +3,7 @@ let enemyY;
 
 let spell;
 var sprite;
+var spellContainer;
 
 function preload()
 {
@@ -47,7 +48,6 @@ function draw()
             }
              
         }
-    
     }
 
     
