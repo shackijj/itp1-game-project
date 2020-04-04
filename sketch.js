@@ -80,6 +80,7 @@ var sounds;
 var gameState;
 var skeleton;
 var enemies;
+var mushroom;
 var spells;
 
 function setup() {
@@ -155,7 +156,8 @@ function startGame() {
 	];
 
 	enemies = [
-		{x: 100, y: floorPosY, direction: -1, range: 50, curStep: 0}
+		{x: 100, y: floorPosY, direction: -1, range: 50, curStep: 0, renderer: skeleton, isDead: false},
+		{x: 900, y: floorPosY, direction: -1, range: 70, curStep: 0, renderer: mushroom, isDead: false},
 	]
 }
 
@@ -173,6 +175,7 @@ function preload() {
 	aCloud = new ACloud();
 	bCloud = new BCloud();
 	skeleton = new Skeleton()
+	mushroom = new MushroomEnemy();
 	backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
 	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
 	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
@@ -323,12 +326,15 @@ function drawLives() {
 
 function drawEnemies() {
 	enemies.forEach(function(enemy) {
-		if (enemy.direction > 0) {
-			skeleton.setState(EnemyState.MovingRight);
-		} else {
-			skeleton.setState(EnemyState.MovingLeft);
+		if (enemy.isDead) {
+			return;
 		}
-		skeleton.draw(enemy.x, enemy.y);
+		if (enemy.direction > 0) {
+			enemy.renderer.setState(EnemyState.MovingRight);
+		} else {
+			enemy.renderer.setState(EnemyState.MovingLeft);
+		}
+		enemy.renderer.draw(enemy.x, enemy.y);
 	})
 }
 
@@ -340,6 +346,10 @@ function updateEnemies() {
 			enemy.curStep = 0;
 			enemy.direction *= -1;
 		}
+        if (spells.hitCheck(enemy.x, enemy.y))
+        {
+            enemy.isDead = true;
+        }
 	})
 }
 

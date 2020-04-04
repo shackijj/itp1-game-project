@@ -40,7 +40,16 @@ class SpellContainer
 
     hitCheck(enemyX, enemyY)
     {
-        
+        this.spells = this.spells.filter(function(spell) {
+            return spell.toDestroy !== true;
+        });
+        for (var i = 0; i < this.spells.length; i++)
+        {
+            if (dist(enemyX, enemyY, this.spells[i].x, this.spells[i].y) < 80) {
+                this.spells[i].toDestroy = true;
+                return true;
+            }
+        }
+        return false;
     }
-
 }
