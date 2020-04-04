@@ -56,13 +56,13 @@
     }
     
     FlyingEyeEnemy.prototype.load = function () {
-        this.spritesheetFlying = loadImage("/adventurer/adventurer.png");
-        this.spritesheetAttacking = loadImage("/adventurer/adventurer.png");
-        this.spritesheet = loadImage("/adventurer/adventurer.png");
-        this.spritesheet = loadImage("/adventurer/adventurer.png");
+        this.spritesheetFlying = loadImage("/flying-eye-enemy/flight.png");
+        this.spritesheetAttacking = loadImage("/flying-eye-enemy/attack.png");
+        this.spritesheetDying = loadImage("/flying-eye-enemy/death.png");
+        this.spritesheetHit = loadImage("/flying-eye-enemy/take-hit.png");
     }
     
-    Adventurer.prototype.isSafari = function() {
+    FlyingEyeEnemy.prototype.isSafari = function() {
         var ua = window.navigator.userAgent.toLocaleLowerCase();
         return ua.indexOf('safari') > -1 && ua.indexOf('chrome') === -1;
     }
@@ -70,73 +70,108 @@
     /**
      * @param {number} count
      */
-    Adventurer.prototype.onFrameChange = function onFrameChange() {
+    FlyingEyeEnemy.prototype.onFrameChange = function onFrameChange() {
         this.frameCount += 1;
-        this.updateStandingFrame(this.frameCount);
-        this.updateWalkingFrame(this.frameCount);
-        this.updatePlummetingFrame(this.frameCount);
-        this.updateFallingFrame(this.frameCount);
+        this.updateFlyingFrame(this.frameCount);
+        this.updateAttackingFrame(this.frameCount);
+        this.updateDyingFrame(this.frameCount);
+        this.updateHitFrame(this.frameCount);
     };
     
-    Adventurer.prototype.resetPlummetingFrame = function resetPlummetingFrame() {
-        this.plummeting.frame = 0;
-    }
+    // Adventurer.prototype.resetPlummetingFrame = function resetPlummetingFrame() {
+    //     this.plummeting.frame = 0;
+    // }
     
-    Adventurer.prototype.updateStandingFrame = function(count) {
-        if (count % 12 === 0) {
-            this.standing.frame++;
-            if (this.standing.frame > 3) {
-                this.standing.frame = 0;
-            }
-        }
-        this.standing.x = SPRITE_WIDTH * this.standing.frame;
-        this.standing.y = 0;
-    }
-    
-    Adventurer.prototype.updateWalkingFrame = function(count) {
+    // FlyingEyeEnemy.prototype.updateFlyingFrame = function(count) {
+    //     if (count % 12 === 0) {
+    //         this.standing.frame++;
+    //         if (this.standing.frame > 3) {
+    //             this.standing.frame = 0;
+    //         }
+    //     }
+    //     this.standing.x = SPRITE_WIDTH * this.standing.frame;
+    //     this.standing.y = 0;
+    // }
+
+    FlyingEyeEnemy.prototype.updateFlyingFrame = function(count) {
         if (count % 6 === 0) {
-            this.walking.frame++;
-            if (this.walking.frame > 5) {
-                this.walking.frame = 0;
+            this.flying.frame++;
+            if (this.flying.frame > 5) {
+                this.flying.frame = 0;
             }
         }
-        this.walking.x = SPRITE_WIDTH * this.walking.frame + SPRITE_WIDTH;
-        this.walking.y = SPRITE_HEIGHT;
+        this.flying.x = SPRITE_WIDTH * this.flying.frame + SPRITE_WIDTH;
+        this.flying.y = SPRITE_HEIGHT;
     }
     
-    Adventurer.prototype.updatePlummetingFrame = function(count) {
-        if (count % 3 === 0) {
-            this.plummeting.frame++;
-            if (this.plummeting.frame > 7) {
-                this.plummeting.frame = 0;
-            }
-        }
-        if (this.plummeting.frame < 6) {
-            this.plummeting.x = SPRITE_WIDTH * this.plummeting.frame + SPRITE_WIDTH;
-            this.plummeting.y = SPRITE_HEIGHT * 2, SPRITE_WIDTH;
-        } else {
-            this.plummeting.x = 0;
-            this.plummeting.y = SPRITE_HEIGHT * 3, SPRITE_WIDTH;
-        }
-    }
-    
-    Adventurer.prototype.updateFallingFrame = function(count) {
+    FlyingEyeEnemy.prototype.updateAttackingFrame = function(count) {
         if (count % 6 === 0) {
-            this.falling.frame++;
-            if (this.falling.frame > 1) {
-                this.falling.frame = 0;
+            this.attacking.frame++;
+            if (this.attacking.frame > 5) {
+                this.attacking.frame = 0;
             }
         }
-        if (this.falling.frame === 0) {
-            this.falling.x = SPRITE_WIDTH;
-            this.falling.y = SPRITE_HEIGHT * 3, SPRITE_WIDTH;
-        } else {
-            this.falling.x = SPRITE_WIDTH * 2;
-            this.falling.y = SPRITE_HEIGHT * 3, SPRITE_WIDTH;
-        }
+        this.attacking.x = SPRITE_WIDTH * this.attacking.frame + SPRITE_WIDTH;
+        this.attacking.y = SPRITE_HEIGHT;
     }
+
+
+    FlyingEyeEnemy.prototype.updateDyingFrame = function(count) {
+        if (count % 6 === 0) {
+            this.dying.frame++;
+            if (this.dying.frame > 5) {
+                this.dying.frame = 0;
+            }
+        }
+        this.dying.x = SPRITE_WIDTH * this.dying.frame + SPRITE_WIDTH;
+        this.dying.y = SPRITE_HEIGHT;
+    }
+
+    FlyingEyeEnemy.prototype.updateHitFrame = function(count) {
+        if (count % 6 === 0) {
+            this.hit.frame++;
+            if (this.hit.frame > 5) {
+                this.hit.frame = 0;
+            }
+        }
+        this.hit.x = SPRITE_WIDTH * this.hit.frame + SPRITE_WIDTH;
+        this.hit.y = SPRITE_HEIGHT;
+    }
+
     
-    Adventurer.prototype._drawSprite = function (xDest, yDest, flippedHor) {
+    // FlyingEyeEnemy.prototype.updatePlummetingFrame = function(count) {
+    //     if (count % 3 === 0) {
+    //         this.plummeting.frame++;
+    //         if (this.plummeting.frame > 7) {
+    //             this.plummeting.frame = 0;
+    //         }
+    //     }
+    //     if (this.plummeting.frame < 6) {
+    //         this.plummeting.x = SPRITE_WIDTH * this.plummeting.frame + SPRITE_WIDTH;
+    //         this.plummeting.y = SPRITE_HEIGHT * 2, SPRITE_WIDTH;
+    //     } else {
+    //         this.plummeting.x = 0;
+    //         this.plummeting.y = SPRITE_HEIGHT * 3, SPRITE_WIDTH;
+    //     }
+    // }
+    
+    // FlyingEyeEnemy.prototype.updateFallingFrame = function(count) {
+    //     if (count % 6 === 0) {
+    //         this.falling.frame++;
+    //         if (this.falling.frame > 1) {
+    //             this.falling.frame = 0;
+    //         }
+    //     }
+    //     if (this.falling.frame === 0) {
+    //         this.falling.x = SPRITE_WIDTH;
+    //         this.falling.y = SPRITE_HEIGHT * 3, SPRITE_WIDTH;
+    //     } else {
+    //         this.falling.x = SPRITE_WIDTH * 2;
+    //         this.falling.y = SPRITE_HEIGHT * 3, SPRITE_WIDTH;
+    //     }
+    // }
+    
+    FlyingEyeEnemy.prototype._drawSprite = function (xDest, yDest, flippedHor) {
         push();
         var xMultiplier = 1;
         if (flippedHor) {
@@ -146,8 +181,28 @@
         if (!this.safari) {
             noSmooth();
         }
+
+        let sheetToUse; 
+
+        switch(this.state) {
+            case FlyingEyeEnemy.States.Flight:
+                sheetToUse = this.spritesheetFlying;
+                break;
+            case FlyingEyeEnemy.States.Attack:
+                sheetToUse = this.spritesheetAttacking;
+                break;
+            case FlyingEyeEnemy.States.Death:
+                sheetToUse = this.spritesheetDying;
+                break;
+            case FlyingEyeEnemy.States.TakeHit:
+                sheetToUse = this.spritesheetHit;
+                break;
+            default:
+                throw new Error("Unknown state: " + this.state);
+        }
+
         image(
-            this.spritesheet,
+            this.sheetToUse,
             xMultiplier * (this.x - X_OFFSET),
             this.y - Y_OFFSET,
             xMultiplier * AREA_WIDTH,
@@ -159,42 +214,28 @@
         pop();
     }
     
-    Adventurer.prototype.drawWalkingRight = function () {
-        this._drawSprite(this.walking.x, this.walking.y);
+    FlyingEyeEnemy.prototype.drawFlying = function () {
+        this._drawSprite(this.flying.x, this.flying.y);
     };
     
-    Adventurer.prototype.drawWalkingLeft = function () {
-        this._drawSprite(this.walking.x, this.walking.y, true);
+    FlyingEyeEnemy.prototype.drawAttacking = function () {
+        this._drawSprite(this.attacking.x, this.attacking.y, true);
     }
     
-    Adventurer.prototype.drawFacingRight = function drawFacingRight() {
-        this._drawSprite(this.standing.x, this.standing.y);
+    FlyingEyeEnemy.prototype.drawDying = function () {
+        this._drawSprite(this.dying.x, this.dying.y, true);
     }
     
-    Adventurer.prototype.drawFacingLeft = function drawFacingLeft() {
-        this._drawSprite(this.standing.x, this.standing.y, true);
+    FlyingEyeEnemy.prototype.drawHit = function () {
+        this._drawSprite(this.hit.x, this.hit.y, true);
     }
     
-    Adventurer.prototype.drawPlummetingRight = function drawPlummetingRight() {
-        this._drawSprite(this.plummeting.x, this.plummeting.y);
-    }
-    
-    Adventurer.prototype.drawPlummetingLeft = function drawPlummetingLeft() {
-        this._drawSprite(this.plummeting.x, this.plummeting.y, true);
-    }
-    
-    Adventurer.prototype.drawFallingRight = function drawFallingRight() {
-        this._drawSprite(this.falling.x, this.falling.y);
-    }
-    
-    Adventurer.prototype.drawFallingLeft = function drawFallingLeft() {
-        this._drawSprite(this.falling.x, this.falling.y, true);
-    }
+
     
     /**
      * @param {number} state
      */
-    Adventurer.prototype.setState = function setState(state) {
+    FlyingEyeEnemy.prototype.setState = function setState(state) {
         this.state = state;
     }
      
@@ -202,38 +243,28 @@
      * @type {number} x
      * @type {number} y
      */
-    Adventurer.prototype.draw = function draw(x, y) {
+    FlyingEyeEnemy.prototype.draw = function draw(x, y) {
         this.onFrameChange();
         this.x = x;
         this.y = y;
+
         switch(this.state) {
-            case Adventurer.States.FacingLeft:
-                this.drawFacingLeft();
+            case FlyingEyeEnemy.States.Flight:
+                this.drawFlying();
                 break;
-            case Adventurer.States.FacingRight:
-                this.drawFacingRight();
+            case FlyingEyeEnemy.States.Attack:
+                this.drawAttacking();
                 break;
-            case Adventurer.States.WalkingLeft:
-                this.drawWalkingLeft();
+            case FlyingEyeEnemy.States.Death:
+                this.drawDying();
                 break;
-            case Adventurer.States.WalkingRight:
-                this.drawWalkingRight();
-                break;
-            case Adventurer.States.PlummetingLeft:
-                this.drawPlummetingLeft();
-                break;
-            case Adventurer.States.PlummetingRight:
-                this.drawPlummetingRight();
-                break;
-            case Adventurer.States.FallingLeft:
-                this.drawFallingLeft();
-                break;
-            case Adventurer.States.FallingRight:
-                this.drawFallingRight();
+            case FlyingEyeEnemy.States.TakeHit:
+                this.drawHit();
                 break;
             default:
                 throw new Error("Unknown state: " + this.state);
         }
+
     }
-    window.Adventurer = Adventurer;
+    window.FlyingEyeEnemy = FlyingEyeEnemy;
 })();
