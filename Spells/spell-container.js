@@ -49,7 +49,7 @@ class SpellContainer
 
     hitCheck(enemyX, enemyY)
     {
-
+        
     }
 
 }
