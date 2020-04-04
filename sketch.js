@@ -324,9 +324,9 @@ function drawLives() {
 function drawEnemies() {
 	enemies.forEach(function(enemy) {
 		if (enemy.direction > 0) {
-			skeleton.setState(SkeletonState.MovingRight);
+			skeleton.setState(EnemyState.MovingRight);
 		} else {
-			skeleton.setState(SkeletonState.MovingLeft);
+			skeleton.setState(EnemyState.MovingLeft);
 		}
 		skeleton.draw(enemy.x, enemy.y);
 	})
