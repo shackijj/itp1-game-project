@@ -29,9 +29,6 @@
  * This extension was not hard to implement because the material provided in the lecure 
  * is very helpful.
  
- 
- 
- * I am making a test comment here
  */
 
 // constants
@@ -51,6 +48,7 @@ var LastDirection = {
 };
 
 // variables
+var level;
 var player;
 var floorPosY;
 var isLeft;
@@ -79,6 +77,7 @@ var ballItem;
 var platforms;
 var platformsBackground;
 var platformsForeground;
+var sounds;
 
 function setup() {
 	createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -87,7 +86,40 @@ function setup() {
 	startGame();
 }
 
+
+
+function loadSounds()
+{
+    sounds = {level1Music: '',
+             jumpEffect: '',
+             dieEffect: '',
+             discoverSpellEffect: ''};
+    sounds.jumpEffect = loadSound('sounds/hop.wav');
+    sounds.dieEffect = loadSound('sounds/die.flac');
+    sounds.discoverSpellEffect = loadSound('sounds/getspell.wav');
+    sounds.level1Music = loadSound('sounds/forest.mp3');
+}
+
+function preload() {
+    level = 1;
+    loadSounds();
+	adventurer = new Adventurer();
+	appleItem = new AppleCollectableItem();
+	ringItem = new SilverRingCollectableItem();
+	ballItem = new BallCollectableItem();
+	smallTree = new SmallTree();
+	bigTree = new BigTree();
+	aCloud = new ACloud();
+	bCloud = new BCloud();
+	backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	cloudsBackBackground = new CloudsBackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	fontRegular = loadFont('assets/PressStart2P-Regular.ttf');
+}
+
 function startGame() {
+    
 	player = {
 		x: width / 2,
 		y: floorPosY,
@@ -123,31 +155,20 @@ function startGame() {
 		{x: 800, y: floorPosY, isFound: false},
 		{x: 375, y: floorPosY - 120, isFound: false}
 	];
-}
-
-function preload() {
-	adventurer = new Adventurer();
-	appleItem = new AppleCollectableItem();
-	ringItem = new SilverRingCollectableItem();
-	ballItem = new BallCollectableItem();
-	smallTree = new SmallTree();
-	bigTree = new BigTree();
-	aCloud = new ACloud();
-	bCloud = new BCloud();
-	backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
-	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
-	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
-	cloudsBackBackground = new CloudsBackBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
-	fontRegular = loadFont('assets/PressStart2P-Regular.ttf');
+    
+    
 }
 
 function draw() {
+    
+    
 	if (lives === 0) {
 		drawInstructions('Game over. Reload page to play again.');
 		return;
 	}
 	if (flagpole.isReached) {
 		drawInstructions('Level complete. Reload page to play again.');
+        changeLevel();
 		return;
 	}
 	drawBackground();
@@ -277,6 +298,7 @@ function checkPlayerDie() {
 	if (player.y > height) {
 		if (lives > 0) {
 			lives -= 1;
+            sounds.dieEffect.play();
 			startGame();
 		}
 	}
@@ -371,6 +393,7 @@ var SPACEBAR_CODE = 32;
 
 function keyPressed()
 {
+    
 	if (keyCode === LEFT_ARROW_CODE) {
 		isLeft = true;
 		lastDirection = LastDirection.Left;
@@ -383,6 +406,7 @@ function keyPressed()
 		adventurer.resetPlummetingFrame();
 		isPlummeting = true;
 		player.jumpAccel = JUMP_ACCEL ;
+        sounds.jumpEffect.play();
 	}
 }
 
@@ -394,4 +418,14 @@ function keyReleased()
 	if (keyCode === RIGHT_ARROW_CODE) {
 		isRight = false;
 	}
+}
+
+function changeLevel()
+{
+    level = 2;
+    backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	cloudsBackBackground = new CloudsBackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+    flagpole.isReached = false;
 }

@@ -1,7 +1,7 @@
-var backBackground = new BackBackground(1024, 640);
-var frontBackground = new FrontBackground(1024, 640);
-var cloudsFrontBackground = new CloudsFrontBackground(1024, 640);
-var cloudsBackBackground = new CloudsBackBackground(1024, 640);
+var backBackground = new BackBackground(1024, 640, 1);
+var frontBackground = new FrontBackground(1024, 640, 1);
+var cloudsFrontBackground = new CloudsFrontBackground(1024, 640, 1);
+var cloudsBackBackground = new CloudsBackBackground(1024, 640, 1);
 var item_x;
 var item_y;
 

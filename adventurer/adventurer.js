@@ -183,6 +183,7 @@
      * @param {number} state
      */
     Adventurer.prototype.setState = function setState(state) {
+        
         this.state = state;
     }
      
