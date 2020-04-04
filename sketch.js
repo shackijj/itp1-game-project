@@ -75,6 +75,8 @@ var ballItem;
 var platforms;
 var platformsBackground;
 var platformsForeground;
+var level;
+var sounds;
 
 function setup() {
 	createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -121,7 +123,11 @@ function startGame() {
 	];
 }
 
+
+
+
 function preload() {
+    level = 1;
 	adventurer = new Adventurer();
 	appleItem = new AppleCollectableItem();
 	ringItem = new SilverRingCollectableItem();
@@ -130,11 +136,18 @@ function preload() {
 	bigTree = new BigTree();
 	aCloud = new ACloud();
 	bCloud = new BCloud();
-	backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
-	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
-	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
-	cloudsBackBackground = new CloudsBackBackground(CANVAS_WIDTH, CANVAS_HEIGHT);
+	backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	cloudsBackBackground = new CloudsBackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
 	fontRegular = loadFont('assets/PressStart2P-Regular.ttf');
+    
+    sounds = {dieSound : loadSound("sounds/die.wav"),
+             jumpSound : loadSound("sounds/jump.wav"),
+             music : loadSound("sounds/forest.mp3"),
+             fireballSound : loadSound("sounds/"),
+             magnetSpellSound : loadSound("sounds/"),
+             getSpellSound : loadSound("sounds/getspell.wav")};
 }
 
 function draw() {
@@ -266,6 +279,7 @@ function processCollectablesInteractions() {
 function checkFlagpole() {
 	if (player.actual.x > flagpole.x) {
 		flagpole.isReached = true;
+        changeLevel();
 	}
 }
 
@@ -379,6 +393,7 @@ function keyPressed()
 		adventurer.resetPlummetingFrame();
 		isPlummeting = true;
 		player.jumpAccel = JUMP_ACCEL ;
+        sounds.jumpSound.play();
 	}
 }
 
@@ -390,4 +405,15 @@ function keyReleased()
 	if (keyCode === RIGHT_ARROW_CODE) {
 		isRight = false;
 	}
+}
+
+function changeLevel()
+{
+    level = 2;
+    backBackground = new BackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	frontBackground = new FrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	cloudsFrontBackground = new CloudsFrontBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+	cloudsBackBackground = new CloudsBackBackground(CANVAS_WIDTH, CANVAS_HEIGHT, level);
+    
+    flagpole.isReached = false;
 }
