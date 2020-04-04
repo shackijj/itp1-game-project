@@ -31,7 +31,7 @@
  */
 
 // constants
-var BACKGROUND_COLOR = [100,155,255];
+var BACKGROUND_COLOR = [100,155,256];
 var CANYON_WIDTH = 150;
 var TREES_X = [-200, 150, 900, 1500];
 var CLOUDS_X = [-450, 200, 700, 1600];
