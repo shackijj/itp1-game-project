@@ -33,7 +33,7 @@
 // constants
 var BACKGROUND_COLOR = [100,155,255];
 var CANYON_WIDTH = 150;
-var TREES_X = [-200, 150, 900, 1500];
+var TREES_X = [-200, 150, 900, 3100];
 var CLOUDS_X = [-450, 200, 700, 1600];
 var CLOUDS_POSTION_Y = 300;
 var CANVAS_WIDTH = 1024;
@@ -72,7 +72,7 @@ var fontRegular;
 var lives;
 var flagpole;
 var ballItem;
-var platforms;
+const platforms = [];
 var platformsBackground;
 var platformsForeground;
 var level;
@@ -94,7 +94,8 @@ function startGame() {
 		jumpAccel: 0,
 		actual: {
 			x: width / 2
-		}
+		},
+		height: adventurer.height
 	};
 	jumpHeight = floorPosY - 200;
 	scrollPos = 0;
@@ -111,15 +112,40 @@ function startGame() {
 		new Platform(-1000, floorPosY, 64 * 9),
 		new Platform(-300, floorPosY, 64 * 14 ),
 		new Platform(750, floorPosY, 300),
-		new Platform(1200, floorPosY - 50, 64 * 3),
-		new Platform(1400, floorPosY, 1000),
+		new Platform(
+			1200,
+			floorPosY - 50,
+			64 * 3, {
+				range: {
+					y: {
+						min: floorPosY - 200,
+						max: floorPosY
+					},
+				},
+			}
+		),
+		new Platform(
+			1600,
+			floorPosY,
+			1000, {
+				range: {
+					x: {
+						min: 1400,
+						max: 1600 + 300
+					}
+				}
+			}
+		),
+		new Platform(3000, floorPosY, 1000),
 	];
-	platforms = platformsBackground.concat(platformsForeground);
+	platforms.splice(0, platforms.length)
+	platforms.push(...platformsBackground)
+	platforms.push(...platformsForeground);
 	gameScore = 0;
-	flagpole = {x: 2000, isReached: false};
+	flagpole = {x: 3600, isReached: false};
 	collectables = [
 		{x: 100, y: floorPosY, isFound: false},
-		{x: 1500, y: floorPosY, isFound: false},
+		{x: 3100, y: floorPosY, isFound: false},
 		{x: 800, y: floorPosY, isFound: false},
 		{x: 375, y: floorPosY - 120, isFound: false}
 	];
@@ -199,6 +225,8 @@ function drawPlatforms() {
 		platform.draw();
 	});
 	platformsForeground.forEach((platform) => {
+		platform.updatePosition();
+
 		platform.draw();
 	});
 }
@@ -306,18 +334,48 @@ function checkPlayerDie() {
 	}
 }
 
+function simpleCollisionDetection(obj1, obj2) {
+	return obj1.x >= obj2.x &&
+		obj1.x <= obj2.x + obj2.width &&
+		(obj1.y === obj2.y ||
+			obj1.y + obj1.height >= obj2.y
+				&& obj1.y <= obj2.y + obj2.height)
+
+}
+
 function checkIfThePlayerIsOnPlatform() {
-	for(var i = 0; i < platforms.length; i++) {
-		var platform = platforms[i];
-		if (
-			player.actual.x >= platform.x &&
-			player.actual.x <= platform.x + platform.length) {
-			if (platform.y - player.y === 0) {
-				return true ;
+	let result = false;
+	for(let i = 0; i < platforms.length; i++) {
+		// platform.movement && console.log(platform)
+
+		const collision = simpleCollisionDetection({
+			x: player.actual.x,
+			y: player.y,
+			height: player.height
+		}, {
+			x: platforms[i].x,
+			y: platforms[i].y,
+			width: platforms[i].length,
+			height: platforms[i].height
+		}, !!platforms[i].movement)
+		if (isFalling && collision) {
+			console.log('fell collision')
+		}
+		if (collision && !isPlummeting) {
+			const prev = platforms[i].isStoodOn
+			platforms[i].isStoodOn = true
+
+			player.y = platforms[i].y
+			if (!prev)  console.log('collide', platforms[i])
+			//if (platform.movement && prev)  console.log(platform)
+		} else {
+			if (platforms[i].isStoodOn) {
+				console.log('leave',platforms[i])
 			}
+			platforms[i].isStoodOn = false
 		}
 	}
-	return false;
+	return platforms.some(p => p.isStoodOn);
 }
 
 function processInteractions() {
@@ -332,7 +390,7 @@ function processInteractions() {
 	if (isRight) {
 		player.actual.x += 5;
 		if (player.x < width * 0.6) {
-			player.x  += 5;
+			player.x += 5;
 		} else {
 			scrollPos -= 5; // negative for moving against the background
 		}

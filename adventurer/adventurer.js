@@ -42,6 +42,7 @@
             x: 0,
             y: 0,
         };
+        this.height = SPRITE_HEIGHT;
         this.safari = this.isSafari();
         this.load();
     }
