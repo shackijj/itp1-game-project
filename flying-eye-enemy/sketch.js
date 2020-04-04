@@ -13,24 +13,50 @@ function preload() {
     // adv3 = new FlyingEyeEnemy();
     // adv4 = new FlyingEyeEnemy();
 
+    
 }
+
+function grid(x, y, cellWidth, cellHeight, rows, colums) {
+    var columnIndex = 0;
+    var result = [];
+    for (var rowIndex = 0; rowIndex < rows; rowIndex++) {
+        result.push([]);
+        for(var columnIndex = 0; columnIndex < colums; columnIndex++) {
+            stroke(100);
+            noFill();
+            const cellX = x + columnIndex * cellWidth;
+            const cellY = y + rowIndex * cellHeight;
+            rect(cellX, cellY, cellWidth, cellHeight);
+            result[rowIndex].push({x: cellX + cellWidth / 2, y: cellY + cellHeight});
+        }
+    }
+    return result;
+}
+
+
+
 
 function draw () {
 
     background(255);
     //Flying
 
-    stroke(100);
-    noFill();
-    rect(20, 60, 200, 148);
-    noStroke();
-    fill(0);
-    text('1. Flying', 20, 228);
+    // stroke(100);
+    // noFill();
+    // rect(20, 60, 200, 148);
+    // noStroke();
+    // fill(0);
+    // text('1. Flying', 20, 228);
 
-    gameEmeny_x = 120;
-    gameEmeny_y = 208;
-    emenyFlying.setState(FlyingEyeEnemy.Flight);
-    emenyFlying.draw(gameEmeny_x, gameEmeny_y);
+    var table = grid(0, 0, 150, 200, 1, 4);
+    emenyFlying.draw(0, 0);
+
+    
+
+    // gameEmeny_x = 120;
+    // gameEmeny_y = 208;
+    // emenyFlying.setState(FlyingEyeEnemy.States.Flight);
+    // emenyFlying.draw(gameEmeny_x, gameEmeny_y);
 
     // //Attacking
     // stroke(100);
