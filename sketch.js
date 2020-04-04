@@ -346,7 +346,7 @@ function updateEnemies() {
 			enemy.curStep = 0;
 			enemy.direction *= -1;
 		}
-        if (spells.hitCheck(enemy.x, enemy.y))
+        if (!enemy.isDead && spells.hitCheck(enemy.x, enemy.y))
         {
             enemy.isDead = true;
         }
