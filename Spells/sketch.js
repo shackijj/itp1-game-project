@@ -50,6 +50,25 @@ function draw()
         }
     }
 
+    if(spellContainer.cas)
+    {
+        for(let i = 0; i < spellContainer.spells[0].array.length; i++)
+        {
+           
+            if(spellContainer.spells[0].array[i].lifeTime >= 100)
+            {
+                spellContainer.spells[0].array.splice(0,1);
+                console.log("Called");
+                
+            }
+            else{
+                spellContainer.spells[0].array[i].updateSpell();     
+            }
+             
+        }
+    
+    }
+
     
 
 }
