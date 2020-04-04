@@ -6,4 +6,6 @@ A game that was written as a course project for Introduction to programming cour
 
 ## Instructions
 
+Run `npm install` to install dependencies
+
 Run `npm start` to start a web server at port 8080
